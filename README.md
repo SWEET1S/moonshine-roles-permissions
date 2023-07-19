@@ -1,0 +1,2 @@
+- Remove excess
+- Delete gitignore in directories
