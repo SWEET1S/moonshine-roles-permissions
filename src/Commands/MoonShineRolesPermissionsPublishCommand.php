@@ -43,6 +43,10 @@ class MoonShineRolesPermissionsPublishCommand extends MoonShineRolesPermissionsC
         $path = "App\MoonShine\Resources\RoleResource.php";
         $this->copyStub("RoleResource", $path, []);
 
+        $this->call('moonshine-roles-perm:permissions', [
+            'resourceName' => 'RoleResource'
+        ]);
+
         $path = "App\MoonShine\Resources\UserResource.php";
         $this->copyStub("UserResource", $path, [
             '{model-namespace}' => config('moonshine.auth.providers.moonshine.model'),
