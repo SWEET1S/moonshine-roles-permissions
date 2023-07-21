@@ -4,6 +4,7 @@ namespace Sweet1s\MoonshineRolesPermissions\Commands;
 
 use Illuminate\Console\Command;
 use Spatie\Permission\Models\Role;
+use Illuminate\Support\Facades\DB;
 
 class MoonShineRolesPermissionsUserCommand extends Command
 {
@@ -28,23 +29,24 @@ class MoonShineRolesPermissionsUserCommand extends Command
      */
     public function handle(): int
     {
-        $name = $this->ask('Name', 'User');
+        $name = $this->ask('Name');
         $name = ucfirst($name);
 
-        $email = $this->ask('Email', 'admin@admin.com');
+        $email = $this->ask('Email');
 
         $password = $this->secret('Password');
 
         $roles = Role::all()->pluck('name')->toArray();
         $role = $this->choice('Select role', $roles, 0);
 
-        if ($email && $name && $password) {
-            config('moonshine.auth.providers.moonshine.model')::updateOrCreate([
-                'name' => $name,
-                'email' => $email,
-                'password' => bcrypt($password),
-                'role_id' => Role::where('name', $role)->first()->id,
-            ]);
+        if ($email && $name && $password && $role) {
+
+             DB::table('users')->insert([
+                 'name' => $name,
+                 'email' => $email,
+                 'password' => bcrypt($password),
+                 'role_id' => Role::where('name', $role)->first()->id,
+             ]);
 
             $this->components->info('User is created');
         } else {
