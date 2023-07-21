@@ -39,7 +39,7 @@ class MoonShineRolesPermissionsUserCommand extends Command
         $role = $this->choice('Select role', $roles, 0);
 
         if ($email && $name && $password) {
-            config('moonshine.auth.providers.moonshine.model')::create([
+            config('moonshine.auth.providers.moonshine.model')::updateOrCreate([
                 'name' => $name,
                 'email' => $email,
                 'password' => bcrypt($password),
