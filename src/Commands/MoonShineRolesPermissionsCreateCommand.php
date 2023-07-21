@@ -58,8 +58,6 @@ class MoonShineRolesPermissionsCreateCommand extends Command
             ]);
         }
 
-        $this->info('Permissions created successfully!');
-
         return 0;
     }
 

@@ -39,8 +39,6 @@ class MoonShineRolesPermissionsRoleCreateCommand extends MoonShineRolesPermissio
         $permissions = Permission::all()->pluck('name')->toArray();
         $role->syncPermissions($permissions);
 
-        $this->info("Role $name created successfully");
-
         return 0;
     }
 
