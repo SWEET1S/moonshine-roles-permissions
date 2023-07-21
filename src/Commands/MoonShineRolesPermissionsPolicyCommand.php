@@ -69,8 +69,12 @@ class MoonShineRolesPermissionsPolicyCommand extends MoonShineRolesPermissionsCo
         $this->copyStub("Policy", $path, [
             '{model}' => "App\Models\\$this->modelName" == $modalPath ? "" : "use App\Models\\$this->modelName;",
             '{name}' => $this->modelName,
-            '{pathToModel}' => $modalPath,
+            '{pathToUserModel}' => $modalPath,
             '{namePolicy}' => $this->option('name') ?? $this->modelName . 'Policy',
+        ]);
+
+        $this->call('moonshine-roles-perm:permissions', [
+            'resourceName' => $this->modelName . 'Resource'
         ]);
 
         $this->info('Policy generated successfully!');
