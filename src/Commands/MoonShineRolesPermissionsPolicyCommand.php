@@ -55,7 +55,7 @@ class MoonShineRolesPermissionsPolicyCommand extends MoonShineRolesPermissionsCo
             return 0;
         }
 
-        if (class_exists("App\Policies\\" . $this->modelName . "Policy") || class_exists("Sweet1s\MoonshineRolesPermissions\Policies\\" . $this->modelName . "Policy")) {
+        if (class_exists("App\Policies\\" . $this->modelName . "Policy")) {
             $this->error("Policy for $this->modelName already exists!");
             return 0;
         }
