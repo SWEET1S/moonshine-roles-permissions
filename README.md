@@ -58,7 +58,15 @@ use Spatie\Permission\Traits\HasRoles;
 class User extends Authenticatable
 {
     ...
-    use HasRoles; // required
+    use HasRoles;
+
+    protected $fillable = [
+        'email',
+        'role_id',
+        'password',
+        'name',
+        'avatar'
+    ];
 
     public function role(): BelongsTo
     {
