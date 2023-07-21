@@ -92,8 +92,13 @@ public function boot()
 ```bash
 php artisan moonshine-roles-perm:install
 ```
+7. Create a user with new modal and assign the role "Super Admin" to it.
 
-7. Add new MoonShine resource to your MoonShineServiceProvider file, like this:
+```bash
+php artisan moonshine-roles-perm:user
+```
+
+8. Add new MoonShine resource to your MoonShineServiceProvider file, like this:
 
 ```PHP
 MenuGroup::make('System', [
