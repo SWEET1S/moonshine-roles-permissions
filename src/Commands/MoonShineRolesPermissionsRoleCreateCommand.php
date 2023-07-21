@@ -12,14 +12,14 @@ class MoonShineRolesPermissionsRoleCreateCommand extends MoonShineRolesPermissio
      *
      * @var string
      */
-    protected $signature = 'moonshine-roles-perm:role {name} {--all : Assign all existing permissions to the role}';
+    protected $signature = 'moonshine-roles-perm:role {name}';
 
     /**
      * The console command description.
      *
      * @var string
      */
-    protected $description = 'Create a role';
+    protected $description = 'Create a role with all permissions';
 
 
     /**
@@ -36,10 +36,8 @@ class MoonShineRolesPermissionsRoleCreateCommand extends MoonShineRolesPermissio
             'guard_name' => config('moonshine.auth.guard')
         ]);
 
-        if($this->option('all')) {
-            $permissions = Permission::all()->pluck('name')->toArray();
-            $role->syncPermissions($permissions);
-        }
+        $permissions = Permission::all()->pluck('name')->toArray();
+        $role->syncPermissions($permissions);
 
         $this->info("Role $name created successfully");
 
