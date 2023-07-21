@@ -124,7 +124,7 @@ php artisan moonshine:resource Post
 ```
 2. Generate a new policy for the model
 ```bash
-php artisan moonshine-roles-perm:policy Post --namePolicy="PostPolicy"
+php artisan moonshine-roles-perm:policy Post --name="PostPolicy"
 ```
 3. For Resource, add the following:
 
