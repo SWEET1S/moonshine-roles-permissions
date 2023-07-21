@@ -12,7 +12,8 @@
     "authors": [
         {
             "name": "Andrei Balan",
-            "email": "abalan1510it@gmail.com"
+            "email": "abalan1510it@gmail.com",
+            "role": "Developer"
         }
     ],
     "require": {
@@ -43,7 +44,7 @@
     "extra": {
         "laravel": {
             "providers": [
-                "MoonShineRolesPermissionsServiceProvider"
+                "Sweet1s\\MoonshineRolesPermissions\\Providers\\MoonShineRolesPermissionsServiceProvider"
             ]
         }
     }
