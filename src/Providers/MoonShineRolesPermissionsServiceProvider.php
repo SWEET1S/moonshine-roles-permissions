@@ -7,6 +7,7 @@ use Sweet1s\MoonshineRolesPermissions\Commands\MoonShineRolesPermissionsCreateCo
 use Sweet1s\MoonshineRolesPermissions\Commands\MoonShineRolesPermissionsInstallCommand;
 use Sweet1s\MoonshineRolesPermissions\Commands\MoonShineRolesPermissionsPolicyCommand;
 use Sweet1s\MoonshineRolesPermissions\Commands\MoonShineRolesPermissionsPublishCommand;
+use Sweet1s\MoonshineRolesPermissions\Commands\MoonShineRolesPermissionsRoleCreateCommand;
 
 final class MoonShineRolesPermissionsServiceProvider extends ServiceProvider
 {
@@ -15,7 +16,8 @@ final class MoonShineRolesPermissionsServiceProvider extends ServiceProvider
         MoonShineRolesPermissionsPolicyCommand::class,
         MoonShineRolesPermissionsCreateCommand::class,
         MoonShineRolesPermissionsInstallCommand::class,
-        MoonShineRolesPermissionsPublishCommand::class
+        MoonShineRolesPermissionsPublishCommand::class,
+        MoonShineRolesPermissionsRoleCreateCommand::class
     ];
 
     public function register(): void
