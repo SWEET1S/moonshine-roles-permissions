@@ -1,0 +1,105 @@
+<?php
+
+namespace App\Policies;
+
+use {pathToModel} as User;
+use Illuminate\Auth\Access\HandlesAuthorization;
+use Spatie\Permission\Models\Role;
+
+class RolePolicy
+{
+    use HandlesAuthorization;
+
+    /**
+     * Determine whether the user can view any models.
+     *
+     * @param User $user
+     * @return bool
+     */
+    public function viewAny(User $user): bool
+    {
+        return $user->role->hasPermissionTo('RoleResource.viewAny');
+    }
+
+    /**
+     * Determine whether the user can view the model.
+     *
+     * @param User $user
+     * @param Role $model
+     * @return bool
+     */
+    public function view(User $user, Role $model): bool
+    {
+        return $user->role->hasPermissionTo('RoleResource.view');
+    }
+
+    /**
+     * Determine whether the user can create models.
+     *
+     * @param User $user
+     * @return bool
+     */
+    public function create(User $user): bool
+    {
+        return $user->role->hasPermissionTo('RoleResource.create');
+    }
+
+    /**
+     * Determine whether the user can update the model.
+     *
+     * @param User $user
+     * @param Role $model
+     * @return bool
+     */
+    public function update(User $user, Role $model): bool
+    {
+        return $user->role->hasPermissionTo('RoleResource.update');
+    }
+
+    /**
+     * Determine whether the user can delete the model.
+     *
+     * @param User $user
+     * @param Role $model
+     * @return bool
+     */
+    public function delete(User $user, Role $model): bool
+    {
+        return $user->role->hasPermissionTo('RoleResource.delete');
+    }
+
+    /**
+     * Determine whether the user can restore the model.
+     *
+     * @param User $user
+     * @param Role $model
+     * @return bool
+     */
+    public function restore(User $user, Role $model): bool
+    {
+        return $user->role->hasPermissionTo('RoleResource.restore');
+    }
+
+    /**
+     * Determine whether the user can permanently delete the model.
+     *
+     * @param User $user
+     * @param Role $model
+     * @return bool
+     */
+    public function forceDelete(User $user, Role $model): bool
+    {
+        return $user->role->hasPermissionTo('RoleResource.forceDelete');
+    }
+
+    /**
+     * Determine whether the user can mass delete models.
+     *
+     * @param User $user
+     * @return bool
+     */
+    public function massDelete(User $user): bool
+    {
+        return $user->role->hasPermissionTo('RoleResource.massDelete');
+    }
+}
