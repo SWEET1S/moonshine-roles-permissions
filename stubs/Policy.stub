@@ -14,11 +14,11 @@ class {namePolicy}
      * Determine whether the user can view any models.
      *
      * @param User $user
-     * @return bool
+     * @return bool|null
      */
-    public function viewAny(User $user): bool
+    public function viewAny(User $user): bool|null
     {
-        return $user->role->hasPermissionTo('{name}Resource.viewAny');
+        return $user?->role?->hasPermissionTo('{name}Resource.viewAny');
     }
 
     /**
@@ -26,22 +26,22 @@ class {namePolicy}
      *
      * @param User $user
      * @param {name} $model
-     * @return bool
+     * @return bool|null
      */
-    public function view(User $user, {name} $model): bool
+    public function view(User $user, {name} $model): bool|null
     {
-        return $user->role->hasPermissionTo('{name}Resource.view');
+        return $user?->role?->hasPermissionTo('{name}Resource.view');
     }
 
     /**
      * Determine whether the user can create models.
      *
      * @param User $user
-     * @return bool
+     * @return bool|null
      */
-    public function create(User $user): bool
+    public function create(User $user): bool|null
     {
-        return $user->role->hasPermissionTo('{name}Resource.create');
+        return $user?->role?->hasPermissionTo('{name}Resource.create');
     }
 
     /**
@@ -49,11 +49,11 @@ class {namePolicy}
      *
      * @param User $user
      * @param {name} $model
-     * @return bool
+     * @return bool|null
      */
-    public function update(User $user, {name} $model): bool
+    public function update(User $user, {name} $model): bool|null
     {
-        return $user->role->hasPermissionTo('{name}Resource.update');
+        return $user?->role?->hasPermissionTo('{name}Resource.update');
     }
 
     /**
@@ -61,11 +61,11 @@ class {namePolicy}
      *
      * @param User  $user
      * @param {name} $model
-     * @return bool
+     * @return bool|null
      */
-    public function delete(User $user, {name} $model): bool
+    public function delete(User $user, {name} $model): bool|null
     {
-        return $user->role->hasPermissionTo('{name}Resource.delete');
+        return $user?->role?->hasPermissionTo('{name}Resource.delete');
     }
 
     /**
@@ -73,11 +73,11 @@ class {namePolicy}
      *
      * @param User  $user
      * @param {name} $model
-     * @return bool
+     * @return bool|null
      */
-    public function restore(User $user, {name} $model): bool
+    public function restore(User $user, {name} $model): bool|null
     {
-        return $user->role->hasPermissionTo('{name}Resource.restore');
+        return $user?->role?->hasPermissionTo('{name}Resource.restore');
     }
 
     /**
@@ -85,21 +85,21 @@ class {namePolicy}
      *
      * @param User $user
      * @param {name} $model
-     * @return bool
+     * @return bool|null
      */
-    public function forceDelete(User $user, {name} $model): bool
+    public function forceDelete(User $user, {name} $model): bool|null
     {
-        return $user->role->hasPermissionTo('{name}Resource.forceDelete');
+        return $user?->role?->hasPermissionTo('{name}Resource.forceDelete');
     }
 
     /**
      * Determine whether the user can mass delete models.
      *
      * @param User $user
-     * @return bool
+     * @return bool|null
      */
-    public function massDelete(User $user): bool
+    public function massDelete(User $user): bool|null
     {
-        return $user->role->hasPermissionTo('{name}Resource.massDelete');
+        return $user?->role?->hasPermissionTo('{name}Resource.massDelete');
     }
 }

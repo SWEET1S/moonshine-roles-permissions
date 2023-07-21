@@ -14,11 +14,11 @@ class RolePolicy
      * Determine whether the user can view any models.
      *
      * @param User $user
-     * @return bool
+     * @return bool|null
      */
-    public function viewAny(User $user): bool
+    public function viewAny(User $user): bool|null
     {
-        return $user->role->hasPermissionTo('RoleResource.viewAny');
+        return $user?->role?->hasPermissionTo('RoleResource.viewAny');
     }
 
     /**
@@ -26,22 +26,22 @@ class RolePolicy
      *
      * @param User $user
      * @param Role $model
-     * @return bool
+     * @return bool|null
      */
-    public function view(User $user, Role $model): bool
+    public function view(User $user, Role $model): bool|null
     {
-        return $user->role->hasPermissionTo('RoleResource.view');
+        return $user?->role?->hasPermissionTo('RoleResource.view');
     }
 
     /**
      * Determine whether the user can create models.
      *
      * @param User $user
-     * @return bool
+     * @return bool|null
      */
-    public function create(User $user): bool
+    public function create(User $user): bool|null
     {
-        return $user->role->hasPermissionTo('RoleResource.create');
+        return $user?->role?->hasPermissionTo('RoleResource.create');
     }
 
     /**
@@ -49,11 +49,11 @@ class RolePolicy
      *
      * @param User $user
      * @param Role $model
-     * @return bool
+     * @return bool|null
      */
-    public function update(User $user, Role $model): bool
+    public function update(User $user, Role $model): bool|null
     {
-        return $user->role->hasPermissionTo('RoleResource.update');
+        return $user?->role?->hasPermissionTo('RoleResource.update');
     }
 
     /**
@@ -61,11 +61,11 @@ class RolePolicy
      *
      * @param User $user
      * @param Role $model
-     * @return bool
+     * @return bool|null
      */
-    public function delete(User $user, Role $model): bool
+    public function delete(User $user, Role $model): bool|null
     {
-        return $user->role->hasPermissionTo('RoleResource.delete');
+        return $user?->role?->hasPermissionTo('RoleResource.delete');
     }
 
     /**
@@ -73,11 +73,11 @@ class RolePolicy
      *
      * @param User $user
      * @param Role $model
-     * @return bool
+     * @return bool|null
      */
-    public function restore(User $user, Role $model): bool
+    public function restore(User $user, Role $model): bool|null
     {
-        return $user->role->hasPermissionTo('RoleResource.restore');
+        return $user?->role?->hasPermissionTo('RoleResource.restore');
     }
 
     /**
@@ -85,21 +85,21 @@ class RolePolicy
      *
      * @param User $user
      * @param Role $model
-     * @return bool
+     * @return bool|null
      */
-    public function forceDelete(User $user, Role $model): bool
+    public function forceDelete(User $user, Role $model): bool|null
     {
-        return $user->role->hasPermissionTo('RoleResource.forceDelete');
+        return $user?->role?->hasPermissionTo('RoleResource.forceDelete');
     }
 
     /**
      * Determine whether the user can mass delete models.
      *
      * @param User $user
-     * @return bool
+     * @return bool|null
      */
-    public function massDelete(User $user): bool
+    public function massDelete(User $user): bool|null
     {
-        return $user->role->hasPermissionTo('RoleResource.massDelete');
+        return $user?->role?->hasPermissionTo('RoleResource.massDelete');
     }
 }
