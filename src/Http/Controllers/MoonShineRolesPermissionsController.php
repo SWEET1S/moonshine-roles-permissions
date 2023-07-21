@@ -12,6 +12,15 @@ class MoonShineRolesPermissionsController extends Controller
     public function attachPermissionsToRole(Request $request, $roleID){
         $role = Role::where('id', $roleID)->first();
 
+        if($request->get('permissions') == null){
+            $role->syncPermissions([]);
+            MoonShineUI::toast(
+                __('moonshine::ui.saved'),
+                'success'
+            );
+            return back();
+        }
+
         $permissions = array_keys($request->get('permissions'));
         $role->syncPermissions($permissions);
 
