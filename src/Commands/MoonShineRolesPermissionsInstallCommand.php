@@ -34,8 +34,6 @@ class MoonShineRolesPermissionsInstallCommand extends Command
 
         $this->call('moonshine-roles-perm:publish');
 
-        $this->call('moonshine-roles-perm:policy', ['model' => 'User']);
-
         $this->call('vendor:publish', [
             '--provider' => "Sweet1s\MoonshineRolesPermissions\MoonshineRolesPermissionsServiceProvider",
             '--tag' => "config"

@@ -53,6 +53,10 @@ class MoonShineRolesPermissionsPublishCommand extends MoonShineRolesPermissionsC
             '{model}' => "User"
         ]);
 
+        $this->call('moonshine-roles-perm:permissions', [
+            'resourceName' => 'UserResource'
+        ]);
+
     }
 
     /**
@@ -65,6 +69,11 @@ class MoonShineRolesPermissionsPublishCommand extends MoonShineRolesPermissionsC
         }
 
         $path = "App\Policies\RolePolicy.php";
+        $this->copyStub("RolePolicy", $path, [
+            '{pathToModel}' => config('moonshine.auth.providers.moonshine.model')
+        ]);
+
+        $path = "App\Policies\UserPolicy.php";
         $this->copyStub("RolePolicy", $path, [
             '{pathToModel}' => config('moonshine.auth.providers.moonshine.model')
         ]);
