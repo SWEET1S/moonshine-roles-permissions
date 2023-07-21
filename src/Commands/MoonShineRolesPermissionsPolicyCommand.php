@@ -3,6 +3,7 @@
 namespace Sweet1s\MoonshineRolesPermissions\Commands;
 
 use Illuminate\Contracts\Filesystem\FileNotFoundException;
+use Spatie\Permission\Models\Role;
 
 class MoonShineRolesPermissionsPolicyCommand extends MoonShineRolesPermissionsCommand
 {
@@ -76,6 +77,12 @@ class MoonShineRolesPermissionsPolicyCommand extends MoonShineRolesPermissionsCo
         $this->call('moonshine-roles-perm:permissions', [
             'resourceName' => $this->modelName . 'Resource'
         ]);
+
+        if($role = Role::first()?->name ?? false){
+            $this->call('moonshine-roles-perm:role', [
+                'name' => $role,
+            ]);
+        }
 
         $this->info('Policy generated successfully!');
 
