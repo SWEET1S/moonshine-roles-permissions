@@ -42,8 +42,7 @@ class MoonShineRolesPermissionsInstallCommand extends Command
         $this->info("Provider published successfully.");
 
         $this->call('moonshine-roles-perm:role',[
-            'name' => 'Super Admin',
-            '--all' => true
+            'name' => 'Super Admin'
         ]);
 
         $this->info("Super Admin role created successfully.");
