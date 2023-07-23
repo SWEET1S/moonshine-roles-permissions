@@ -74,7 +74,7 @@ class MoonShineRolesPermissionsPublishCommand extends MoonShineRolesPermissionsC
         ]);
 
         $path = "App\Policies\UserPolicy.php";
-        $this->copyStub("RolePolicy", $path, [
+        $this->copyStub("UserPolicy", $path, [
             '{pathToModel}' => config('moonshine.auth.providers.moonshine.model')
         ]);
     }
