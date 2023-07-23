@@ -9,9 +9,7 @@ use Spatie\Permission\Models\Role;
 
 class MoonShineRolesPermissionsController extends Controller
 {
-    public function attachPermissionsToRole(Request $request, $roleID){
-        $role = Role::where('id', $roleID)->first();
-
+    public function attachPermissionsToRole(Request $request, Role $role){
         if($request->get('permissions') == null){
             $role->syncPermissions([]);
             MoonShineUI::toast(

@@ -8,7 +8,7 @@
         <div class="text-lg my-4">{{ $element->label() }}</div>
 
         <x-moonshine::form
-            :action="route('moonshine-roles-permissions.roles.attach-permissions-to-role', $item->getKey())"
+            :action="route('moonshine-roles-permissions.roles.attach-permissions-to-role', $item)"
             method="post"
         >
 
