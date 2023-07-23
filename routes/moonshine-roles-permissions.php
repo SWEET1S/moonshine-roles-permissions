@@ -8,6 +8,10 @@ $middlewares = collect(config('moonshine.route.middleware'))
     ->toArray();
 
 Route::as('moonshine-roles-permissions.')->middleware($middlewares)->group(function () {
-    Route::post('moonshine-roles-permissions/roles/{role}/permissions', [MoonShineRolesPermissionsController::class, 'attachPermissionsToRole'])
-        ->name('roles.attach-permissions-to-role');
+
+    Route::middleware('auth.moonshine')->group(function () {
+        Route::post('moonshine-roles-permissions/roles/{role}/permissions', [MoonShineRolesPermissionsController::class, 'attachPermissionsToRole'])
+            ->name('roles.attach-permissions-to-role');
+    });
+
 });
