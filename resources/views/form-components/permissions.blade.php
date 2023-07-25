@@ -1,9 +1,5 @@
 @if($item->exists)
 
-    @php
-        $permissions = Spatie\Permission\Models\Permission::all()->pluck('name')->toArray();
-    @endphp
-
     <div>
         <div class="text-lg my-4">{{ $element->label() }}</div>
 
@@ -15,11 +11,12 @@
             @foreach(moonshine()->getResources() as $resource)
 
                 @php
-                    $resourceName = explode('\\',get_class($resource))[count(explode('\\',get_class($resource))) - 1];
+                    $resourceName = class_basename($resource);
                 @endphp
 
                 <div>
-                    <div class="text-md my-4 {{ strpos(implode($permissions), $resourceName) === false ? 'hidden' : '' }}">
+                    <div
+                        class="text-md my-4 {{ $element->existsPermissions($resourceName) === false ? 'hidden' : '' }}">
                         {{ $resource->title() }}
                     </div>
 
@@ -27,25 +24,29 @@
                         @foreach($resource->gateAbilities() as $ability)
 
                             @php
-                                $permission = $resourceName.".".$ability
+                                $permission = $element->getPermissionName($resourceName, $ability);
                             @endphp
 
-                            <x-moonshine::form.input-wrapper
-                                name="permissions[{{ $permission }}]"
-                                :label="$ability"
-                                :beforeLabel="true"
-                                class="form-group-inline {{ in_array($permission, $permissions) ?: 'hidden'}}"
-                                :id="str('permissions_' . get_class($resource) . '_' . $ability)->slug('_')"
-                            >
+                            @if($element->hasPermission($item, $permission))
 
-                                <x-moonshine::form.input
+                                <x-moonshine::form.input-wrapper
+                                    name="permissions[{{ $permission }}]"
+                                    :label="$ability"
+                                    :beforeLabel="true"
+                                    class="form-group-inline {{ $element->existPermission($permission) ?: 'hidden'}}"
                                     :id="str('permissions_' . get_class($resource) . '_' . $ability)->slug('_')"
-                                    type="checkbox"
-                                    name="permissions[{{ $permission }}]]"
-                                    value="1"
-                                    :checked="in_array($permission, $permissions) ? $item->hasPermissionTo($permission) : false"
-                                />
-                            </x-moonshine::form.input-wrapper>
+                                >
+
+                                    <x-moonshine::form.input
+                                        :id="str('permissions_' . get_class($resource) . '_' . $ability)->slug('_')"
+                                        type="checkbox"
+                                        name="permissions[{{ $permission }}]]"
+                                        value="1"
+                                        :checked="$element->hasPermission($item, $permission)"
+                                    />
+                                </x-moonshine::form.input-wrapper>
+
+                            @endif
                         @endforeach
                     </div>
                 </div>
