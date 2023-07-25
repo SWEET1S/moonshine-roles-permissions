@@ -44,6 +44,8 @@ composer require sweet1s/moonshine-roles-permissions
 ```
 4. For the user model, add the following:
 
+*_[ ! ]_* _Also, you can extend the MoonshineUser model and use the moonshine_users table, but you must add the column role_id and specify in your new User model protected $table._
+
 ```PHP
 <?php
 
