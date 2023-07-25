@@ -31,7 +31,7 @@ final class RolePermissionsFormComponent extends FormComponent
         return $resourceName . "." . $ability;
     }
 
-    public function hasPermission(Role $item, $permission)
+    public function existHasPermission(Role $item, $permission)
     {
         return in_array($permission, $this->getPermissions()) ? $item->hasPermissionTo($permission) : false;
     }
@@ -39,5 +39,10 @@ final class RolePermissionsFormComponent extends FormComponent
     public function existPermission(string $permission)
     {
         return in_array($permission, $this->getPermissions());
+    }
+
+    public function hasPermission($permission)
+    {
+        return $this->existPermission($permission) ? auth()?->user()?->role?->hasPermissionTo($permission) : false;
     }
 }

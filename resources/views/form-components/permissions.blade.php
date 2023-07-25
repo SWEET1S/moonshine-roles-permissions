@@ -27,7 +27,7 @@
                                 $permission = $element->getPermissionName($resourceName, $ability);
                             @endphp
 
-                            @if($element->hasPermission($item, $permission))
+                            @if($element->hasPermission($permission))
 
                                 <x-moonshine::form.input-wrapper
                                     name="permissions[{{ $permission }}]"
@@ -42,7 +42,7 @@
                                         type="checkbox"
                                         name="permissions[{{ $permission }}]]"
                                         value="1"
-                                        :checked="$element->hasPermission($item, $permission)"
+                                        :checked="$element->existHasPermission($item, $permission)"
                                     />
                                 </x-moonshine::form.input-wrapper>
 
