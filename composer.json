@@ -35,9 +35,6 @@
             "Sweet1s\\MoonshineRolesPermissions\\": "src/"
         }
     },
-    "conflict": {
-        "moonshine/moonshine": "<1.52"
-    },
     "scripts": {
         "test": "vendor/bin/phpunit",
         "format": "vendor/bin/php-cs-fixer fix --allow-risky=yes"
