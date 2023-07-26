@@ -3,6 +3,7 @@
 namespace Sweet1s\MoonshineRolesPermissions\Commands;
 
 use Illuminate\Console\Command;
+use App\Models\Role;
 
 class MoonShineRolesPermissionsInstallCommand extends Command
 {
@@ -34,16 +35,7 @@ class MoonShineRolesPermissionsInstallCommand extends Command
 
         $this->call('moonshine-roles-perm:publish');
 
-        $this->call('vendor:publish', [
-            '--provider' => "Sweet1s\MoonshineRolesPermissions\MoonshineRolesPermissionsServiceProvider",
-            '--tag' => "config"
-        ]);
-
-        $this->call('moonshine-roles-perm:role',[
-            'name' => 'Super Admin'
-        ]);
-
-        $this->info("Super Admin role created successfully.");
+        $this->createRole();
 
         $this->info("\n");
 
@@ -60,6 +52,17 @@ class MoonShineRolesPermissionsInstallCommand extends Command
             $this->call('migrate', [
                '--path' => 'database/migrations/create_or_supplement_users_table.php'
             ]);
+        }
+    }
+
+    public function createRole(): void
+    {
+        if(Role::first() == null){
+            $this->call('moonshine-roles-perm:role',[
+                'name' => 'Super Admin'
+            ]);
+
+            $this->info("Super Admin role created successfully.");
         }
     }
 
