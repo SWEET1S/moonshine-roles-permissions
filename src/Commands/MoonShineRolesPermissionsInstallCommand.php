@@ -30,7 +30,7 @@ class MoonShineRolesPermissionsInstallCommand extends Command
 
         $this->info('Installing MoonShine Roles-Permissions package...');
 
-        $this->call('migrate');
+        $this->migration();
 
         $this->call('moonshine-roles-perm:publish');
 
@@ -38,8 +38,6 @@ class MoonShineRolesPermissionsInstallCommand extends Command
             '--provider' => "Sweet1s\MoonshineRolesPermissions\MoonshineRolesPermissionsServiceProvider",
             '--tag' => "config"
         ]);
-
-        $this->info("Provider published successfully.");
 
         $this->call('moonshine-roles-perm:role',[
             'name' => 'Super Admin'
@@ -54,5 +52,15 @@ class MoonShineRolesPermissionsInstallCommand extends Command
         return 0;
     }
 
+    public function migration(): void
+    {
+        $response = $this->choice('Do you want create or supplement users table ?', ['yes', 'no'], 0);
+
+        if ($response == 'yes') {
+            $this->call('migrate', [
+               '--path' => 'database/migrations/create_or_supplement_users_table.php'
+            ]);
+        }
+    }
 
 }

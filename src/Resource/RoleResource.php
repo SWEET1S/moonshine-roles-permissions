@@ -2,14 +2,15 @@
 
 declare(strict_types=1);
 
-namespace App\MoonShine\Resources;
+namespace Sweet1s\MoonshineRolesPermissions\Resource;
+
+use App\Models\Role;
 
 use MoonShine\Decorations\Block;
 use MoonShine\Fields\ID;
 use MoonShine\Fields\Text;
 use MoonShine\Filters\TextFilter;
 use MoonShine\Resources\Resource;
-use Spatie\Permission\Models\Role;
 use Sweet1s\MoonshineRolesPermissions\FormComponents\RolePermissionsFormComponent;
 
 class RoleResource extends Resource

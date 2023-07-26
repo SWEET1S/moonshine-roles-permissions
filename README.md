@@ -17,13 +17,13 @@ This package is an extension exclusively designed for the [MoonShine Admin Panel
 
 ## Important
 
-Before using the package, it is crucial to understand that you need to use a different user model instead of "MoonShineUser." The package requires the utilization of the Spatie Laravel Permission package and an empty "moonshine_user_permissions" table. Please note that when the "moonshine_user_permissions" table contains other permissions for users, MoonShine Admin Panel utilizes its internal Policy implementation, disregarding any existing Policy defined in "App/Policy."
+Before using the package, it is crucial to understand that you need to use a different user model instead of "MoonShineUser". Also, you can extend the MoonshineUser model and use the **moonshine_users table**, but you must add the column **role_id** and specify in your new User model ```protected $table = "moonshine_users"```. The package requires the utilization of the Spatie Laravel Permission package and an empty **"moonshine_user_permissions"** table. Please note that when the "moonshine_user_permissions" table contains other permissions for users, MoonShine Admin Panel utilizes its internal Policy implementation, disregarding any existing Policy defined in "App/Policy."
 
 ---
 
 ## Installation
 
-1. Install the [Spatie Laravel Permissions](https://github.com/spatie/laravel-permission) package and follow the instructions in the documentation to set up the package correctly.
+1. Install the [Spatie Laravel Permissions](https://github.com/spatie/laravel-permission) package and follow the instructions in the [documentation](https://spatie.be/docs/laravel-permission/v5/installation-laravel) to set up the package correctly.
 
 2. Install the package via composer:
 
@@ -42,9 +42,24 @@ composer require sweet1s/moonshine-roles-permissions
 ],
 ...
 ```
-4. For the user model, add the following:
 
-*_[ ! ]_* _Also, you can extend the MoonshineUser model and use the moonshine_users table, but you must add the column role_id and specify in your new User model protected $table._
+4. Run the following command to install the package and follow the installation steps:
+
+```bash
+php artisan moonshine-roles-perm:install
+```
+
+5. In the permission config file, change the models.role to App\Models\Role::class (Model need extend \Spatie\Permission\Models\Role), like this:
+
+```PHP
+'models' => [
+    ...
+    'role' => App\Models\Role::class,
+
+],
+```
+
+6. For the user model, add the following:
 
 ```PHP
 <?php
@@ -54,7 +69,7 @@ namespace App\Models;
 ...
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
-use Spatie\Permission\Models\Role;
+use App\Models\Role;
 use Spatie\Permission\Traits\HasRoles;
 
 class User extends Authenticatable
@@ -63,11 +78,11 @@ class User extends Authenticatable
     use HasRoles;
 
     protected $fillable = [
+        'name',
+        'avatar',
         'email',
         'role_id',
-        'password',
-        'name',
-        'avatar'
+        'password'
     ];
 
     public function role(): BelongsTo
@@ -79,7 +94,7 @@ class User extends Authenticatable
 }
 ```
 
-5. In the AuthServiceProvider.php file, add the following:
+7. In the AuthServiceProvider.php file, add the following ( Super Admin Role ):
 
 ```PHP
 ...
@@ -97,23 +112,18 @@ public function boot()
 }
 ```
 
-6. Run the following command to publish the package's config file:
-
-```bash
-php artisan moonshine-roles-perm:install
-```
-7. Create a user with new modal and assign the role "Super Admin" to it.
+8. (Optional) Create a user with new modal and assign automatically the role "Super Admin" to it.
 
 ```bash
 php artisan moonshine-roles-perm:user
 ```
 
-8. Add new MoonShine resource to your MoonShineServiceProvider file, like this:
+9. Add new MoonShine resource to your MoonShineServiceProvider file, like this:
 
 ```PHP
 MenuGroup::make('System', [
-        MenuItem::make('Admins', new App\MoonShine\Resources\UserResource(), 'heroicons.outline.users'),
-        MenuItem::make('Roles', new App\MoonShine\Resources\RoleResource(), 'heroicons.outline.shield-exclamation'),
+        MenuItem::make('Admins', new \Sweet1s\MoonshineRolesPermissions\Resource\UserResource(), 'heroicons.outline.users'),
+        MenuItem::make('Roles', new \Sweet1s\MoonshineRolesPermissions\Resource\RoleResource(), 'heroicons.outline.shield-exclamation'),
     ], 'heroicons.outline.user-group'),
 ...
 ```
@@ -133,7 +143,6 @@ php artisan moonshine-roles-perm:policy Post --name="PostPolicy"
 ```PHP
 public static bool $withPolicy = true;
 ```
-4. Create a role in the MoonShine Admin Panel and assign permissions to it.
 
 ---
 

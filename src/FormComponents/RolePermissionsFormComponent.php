@@ -36,7 +36,7 @@ final class RolePermissionsFormComponent extends FormComponent
         return in_array($permission, $this->getPermissions()) ? $item->hasPermissionTo($permission) : false;
     }
 
-    public function existPermission(string $permission)
+    public function existPermission(string $permission): bool
     {
         return in_array($permission, $this->getPermissions());
     }

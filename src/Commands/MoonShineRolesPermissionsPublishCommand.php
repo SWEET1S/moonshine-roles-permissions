@@ -3,6 +3,7 @@
 namespace Sweet1s\MoonshineRolesPermissions\Commands;
 
 use Illuminate\Contracts\Filesystem\FileNotFoundException;
+use Illuminate\Support\Facades\File;
 
 class MoonShineRolesPermissionsPublishCommand extends MoonShineRolesPermissionsCommand
 {
@@ -18,7 +19,7 @@ class MoonShineRolesPermissionsPublishCommand extends MoonShineRolesPermissionsC
      *
      * @var string
      */
-    protected $description = 'Publish resources UserResource and RoleResource to App\MoonShine\Resources and policies to App\Policies';
+    protected $description = 'Publish policies to App\Policies and models to App\Models';
 
 
     /**
@@ -29,34 +30,11 @@ class MoonShineRolesPermissionsPublishCommand extends MoonShineRolesPermissionsC
      */
     public function handle(): int
     {
-        $this->publishResources();
         $this->publishPolicies();
-        $this->info("Publishing resources and policies finished!");
+        $this->publishModels();
+
+        $this->info("Publishing model and policies finished!");
         return 0;
-    }
-
-    /**
-     * @throws FileNotFoundException
-     */
-    private function publishResources(): void
-    {
-        $path = "App\MoonShine\Resources\RoleResource.php";
-        $this->copyStub("RoleResource", $path, []);
-
-        $this->call('moonshine-roles-perm:permissions', [
-            'resourceName' => 'RoleResource'
-        ]);
-
-        $path = "App\MoonShine\Resources\UserResource.php";
-        $this->copyStub("UserResource", $path, [
-            '{model-namespace}' => config('moonshine.auth.providers.moonshine.model'),
-            '{model}' => "User"
-        ]);
-
-        $this->call('moonshine-roles-perm:permissions', [
-            'resourceName' => 'UserResource'
-        ]);
-
     }
 
     /**
@@ -77,6 +55,29 @@ class MoonShineRolesPermissionsPublishCommand extends MoonShineRolesPermissionsC
         $this->copyStub("UserPolicy", $path, [
             '{pathToModel}' => config('moonshine.auth.providers.moonshine.model')
         ]);
+    }
+
+    private function publishModels(): void
+    {
+        if (!File::exists("App\Model\Role.php")) {
+            $this->copyStub("Role", "App\Model\Role.php", []);
+
+            $this->info("Role model published successfully.");
+
+            if (config('permission.models.role') != "App\Model\Role") {
+                $this->warn('Replace in config permission.models.role with App\Model\Role');
+            }
+
+            return;
+        }
+
+        $this->warn("Role model already exists.");
+        $this->warn('Extend your model with Spatie\Permission\Models\Role');
+
+        if(config('permission.models.role') != "App\Model\Role"){
+            $this->warn('Replace in config permission.models.role with App\Model\Role');
+        }
+
     }
 
 

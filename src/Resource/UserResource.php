@@ -1,8 +1,8 @@
 <?php
 
-namespace App\MoonShine\Resources;
+namespace Sweet1s\MoonshineRolesPermissions\Resource;
 
-use {model-namespace} as User;
+use App\Models\User as User;
 
 use Illuminate\Validation\Rule;
 use MoonShine\Actions\ExportAction;
@@ -27,7 +27,7 @@ class UserResource extends Resource
 {
     use WithUserPermissions;
 
-    public static string $model = {model}::class;
+    public static string $model = User::class;
     protected static bool $system = true;
     public string $titleField = 'name';
     public static bool $withPolicy = true;

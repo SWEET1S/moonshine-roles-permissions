@@ -4,6 +4,7 @@ namespace App\Policies;
 
 use {pathToModel} as User;
 use Illuminate\Auth\Access\HandlesAuthorization;
+use App\Models\Role as Role;
 
 class RolePolicy
 {

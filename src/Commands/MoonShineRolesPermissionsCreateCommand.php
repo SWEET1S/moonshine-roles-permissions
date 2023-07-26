@@ -13,7 +13,7 @@ class MoonShineRolesPermissionsCreateCommand extends Command
      *
      * @var string
      */
-    protected $signature = 'moonshine-roles-perm:permissions {resourceName}';
+    protected $signature = 'moonshine-roles-perm:permissions {resourceName : The name of the resource like UserResource}';
 
     /**
      * The console command description.
