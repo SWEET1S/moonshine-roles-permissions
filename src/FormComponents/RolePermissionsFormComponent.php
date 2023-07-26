@@ -45,4 +45,22 @@ final class RolePermissionsFormComponent extends FormComponent
     {
         return $this->existPermission($permission) ? auth()?->user()?->role?->hasPermissionTo($permission) : false;
     }
+
+    public function hasAnyResourcePermissions($resource): bool
+    {
+        $notHavePermission = 0;
+        $resourceName = class_basename($resource);
+
+        foreach ($resource->gateAbilities() as $ability) {
+            if (!$this->hasPermission($this->getPermissionName($resourceName, $ability))) {
+                $notHavePermission++;
+            }
+
+            if ($notHavePermission == count($resource->gateAbilities())) {
+                return false;
+            }
+        }
+
+        return true;
+    }
 }

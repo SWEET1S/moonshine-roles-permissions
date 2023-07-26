@@ -20,6 +20,26 @@ class MoonShineRolesPermissionsController extends Controller
         }
 
         $permissions = array_keys($request->get('permissions'));
+        $authUserRole = auth()?->user()?->role;
+
+        if($authUserRole == null){
+            MoonShineUI::toast(
+                __('moonshine::ui.unauthorized'),
+                'error'
+            );
+            return back();
+        }
+
+        foreach ($permissions as $permission) {
+            if(!$authUserRole?->hasPermissionTo($permission)){
+                MoonShineUI::toast(
+                    __('moonshine::ui.unauthorized'),
+                    'error'
+                );
+                return back();
+            }
+        }
+
         $role->syncPermissions($permissions);
 
         MoonShineUI::toast(
