@@ -59,13 +59,13 @@ class MoonShineRolesPermissionsPublishCommand extends MoonShineRolesPermissionsC
 
     private function publishModels(): void
     {
-        if (!File::exists("App\Model\Role.php")) {
-            $this->copyStub("Role", "App\Model\Role.php", []);
+        if (!File::exists("App\Models\Role.php")) {
+            $this->copyStub("Role", "App\Models\Role.php", []);
 
             $this->info("Role model published successfully.");
 
-            if (config('permission.models.role') != "App\Model\Role") {
-                $this->warn('Replace in config permission.models.role with App\Model\Role');
+            if (config('permission.models.role') != "App\Models\Role") {
+                $this->warn('Replace in config permission.models.role with App\Models\Role::class');
             }
 
             return;
@@ -74,8 +74,8 @@ class MoonShineRolesPermissionsPublishCommand extends MoonShineRolesPermissionsC
         $this->warn("Role model already exists.");
         $this->warn('Extend your model with Spatie\Permission\Models\Role');
 
-        if(config('permission.models.role') != "App\Model\Role"){
-            $this->warn('Replace in config permission.models.role with App\Model\Role');
+        if(config('permission.models.role') != "App\Models\Role"){
+            $this->warn('Replace in config permission.models.role with App\Models\Role::class');
         }
 
     }
