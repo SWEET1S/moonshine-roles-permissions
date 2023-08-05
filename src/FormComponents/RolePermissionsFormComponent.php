@@ -63,4 +63,21 @@ final class RolePermissionsFormComponent extends FormComponent
 
         return true;
     }
+
+    public function getCustomPermissions($resources): array
+    {
+        $customPermissions = $this->permissions;
+
+        foreach ($resources as $resource) {
+            $resourceName = class_basename($resource);
+
+            foreach ($customPermissions as $custom) {
+                if (strpos($custom, $resourceName) !== false) {
+                    unset($customPermissions[array_search($custom, $customPermissions)]);
+                }
+            }
+        }
+
+        return $customPermissions;
+    }
 }
