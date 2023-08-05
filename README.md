@@ -176,6 +176,16 @@ public static bool $withPolicy = true;
 ```
 
 ---
+## Custom Permissions
+
+You can simply create them in the database or by using the command
+__php artisan moonshine-roles-perm:permissions {resourceName}__.
+You can replace resourceName with any word you prefer.
+For example, if resourceName is set to "Database", then 8 permissions
+(view, viewAny, create, update, delete, restore, forceDelete, massDelete)
+with the names resourceName.permission will be created.
+
+---
 
 ### [Commands documentation](./.docs/Commands.md)
 
