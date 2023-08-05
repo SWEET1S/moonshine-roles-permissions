@@ -10,15 +10,22 @@ return new class extends Migration {
      *
      * @return void
      */
-    public function up()
+    public function up(): void
     {
         if (Schema::hasTable('users')) {
-            Schema::table('users', function (Blueprint $table) {
-                $table->string("avatar")->nullable();
 
-                $table->unsignedBigInteger('role_id')->nullable();
-                $table->foreign('role_id')->references('id')->on('roles')->onDelete('cascade');
-            });
+            if (!Schema::hasColumn('users', 'avatar')) {
+                Schema::table('users', function (Blueprint $table) {
+                    $table->string("avatar")->nullable();
+                });
+            }
+
+            if (!Schema::hasColumn('users', 'role_id')) {
+                Schema::table('users', function (Blueprint $table) {
+                    $table->integer('role_id')->nullable();
+                });
+            }
+
         } else {
             Schema::create('users', function (Blueprint $table) {
                 $table->id();
@@ -28,13 +35,11 @@ return new class extends Migration {
                 $table->string('password');
                 $table->integer('role_id');
                 $table->string('avatar');
+
                 $table->rememberToken();
                 $table->timestamps();
             });
         }
-
-        //command for migrate
-        //php artisan migrate --path=database/migrations/create_or_supplement_users_table.php
     }
 
     /**
@@ -42,16 +47,21 @@ return new class extends Migration {
      *
      * @return void
      */
-    public function down()
+    public function down(): void
     {
         if (Schema::hasTable('users')) {
 
-            Schema::table('users', function (Blueprint $table) {
-                $table->dropColumn("avatar");
+            if(Schema::hasColumn('users', 'role_id')) {
+                Schema::table('users', function (Blueprint $table) {
+                    $table->dropColumn('role_id');
+                });
+            }
 
-                $table->dropForeign(['role_id']);
-                $table->dropColumn('role_id');
-            });
+            if(Schema::hasColumn('users', 'avatar')) {
+                Schema::table('users', function (Blueprint $table) {
+                    $table->dropColumn("avatar");
+                });
+            }
 
         }
 
