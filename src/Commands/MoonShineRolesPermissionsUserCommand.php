@@ -3,7 +3,6 @@
 namespace Sweet1s\MoonshineRolesPermissions\Commands;
 
 use Illuminate\Console\Command;
-use Spatie\Permission\Models\Role;
 use Illuminate\Support\Facades\DB;
 
 class MoonShineRolesPermissionsUserCommand extends Command
@@ -36,7 +35,7 @@ class MoonShineRolesPermissionsUserCommand extends Command
 
         $password = $this->secret('Password');
 
-        $roles = Role::all()->pluck('name')->toArray();
+        $roles = config('permission.models.role')::all()->pluck('name')->toArray();
         $role = $this->choice('Select role', $roles, 0);
 
         if ($email && $name && $password && $role) {
@@ -45,7 +44,7 @@ class MoonShineRolesPermissionsUserCommand extends Command
                  'name' => $name,
                  'email' => $email,
                  'password' => bcrypt($password),
-                 'role_id' => Role::where('name', $role)->first()->id,
+                 'role_id' => config('permission.models.role')::where('name', $role)->first()->id,
              ]);
 
             $this->components->info('User is created');

@@ -2,9 +2,6 @@
 
 namespace Sweet1s\MoonshineRolesPermissions\Commands;
 
-use App\Models\Role;
-use Spatie\Permission\Models\Permission;
-
 class MoonShineRolesPermissionsRoleCreateCommand extends MoonShineRolesPermissionsCommand
 {
     /**
@@ -31,12 +28,12 @@ class MoonShineRolesPermissionsRoleCreateCommand extends MoonShineRolesPermissio
     {
         $name = $this->argument('name');
 
-        $role = Role::updateOrCreate([
+        $role = config('permission.models.role')::updateOrCreate([
             'name' => $name,
             'guard_name' => config('moonshine.auth.guard')
         ]);
 
-        $permissions = Permission::all()->pluck('name')->toArray();
+        $permissions = config('permission.models.permission')::all()->pluck('name')->toArray();
         $role->syncPermissions($permissions);
 
         return 0;

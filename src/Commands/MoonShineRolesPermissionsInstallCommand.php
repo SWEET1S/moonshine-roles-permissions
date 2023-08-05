@@ -3,7 +3,6 @@
 namespace Sweet1s\MoonshineRolesPermissions\Commands;
 
 use Illuminate\Console\Command;
-use App\Models\Role;
 
 class MoonShineRolesPermissionsInstallCommand extends Command
 {
@@ -57,7 +56,7 @@ class MoonShineRolesPermissionsInstallCommand extends Command
 
     public function createRole(): void
     {
-        if(Role::first() == null){
+        if(config('permission.models.role')::first() == null){
             $this->call('moonshine-roles-perm:role',[
                 'name' => 'Super Admin'
             ]);

@@ -64,6 +64,10 @@ class MoonShineRolesPermissionsPolicyCommand extends MoonShineRolesPermissionsCo
             mkdir(app_path("Policies"));
         }
 
+        $this->call('moonshine-roles-perm:permissions', [
+            'resourceName' => $this->modelName . 'Resource'
+        ]);
+
         $modalPath = config('moonshine.auth.providers.moonshine.model');
         $path = "App\Policies\\" . ($this->option('name') ?? $this->modelName . 'Policy') . ".php";
 
@@ -72,10 +76,6 @@ class MoonShineRolesPermissionsPolicyCommand extends MoonShineRolesPermissionsCo
             '{name}' => $this->modelName,
             '{pathToUserModel}' => $modalPath,
             '{namePolicy}' => $this->option('name') ?? $this->modelName . 'Policy',
-        ]);
-
-        $this->call('moonshine-roles-perm:permissions', [
-            'resourceName' => $this->modelName . 'Resource'
         ]);
 
         if($role = Role::first()?->name ?? false){

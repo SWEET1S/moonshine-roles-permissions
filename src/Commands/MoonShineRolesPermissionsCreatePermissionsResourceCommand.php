@@ -3,10 +3,8 @@
 namespace Sweet1s\MoonshineRolesPermissions\Commands;
 
 use Illuminate\Console\Command;
-use Illuminate\Support\Facades\Artisan;
-use Spatie\Permission\Models\Permission;
 
-class MoonShineRolesPermissionsCreateCommand extends Command
+class MoonShineRolesPermissionsCreatePermissionsResourceCommand extends Command
 {
     /**
      * The name and signature of the console command.
@@ -52,7 +50,7 @@ class MoonShineRolesPermissionsCreateCommand extends Command
         $this->resourceName = $this->argument('resourceName');
 
         foreach ($this->permissions as $permission) {
-            Permission::updateOrCreate([
+            config('permission.models.permission')::updateOrCreate([
                 'name' => "$this->resourceName.$permission",
                 'guard_name' => config('moonshine.auth.guard')
             ]);
