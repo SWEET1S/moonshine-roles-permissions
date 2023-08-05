@@ -177,7 +177,7 @@ public static bool $withPolicy = true;
 
 ---
 
-### [Commands documentation](./.docs/commands.md)
+### [Commands documentation](./.docs/Commands.md)
 
 ---
 
