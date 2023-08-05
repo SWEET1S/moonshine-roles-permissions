@@ -64,6 +64,16 @@ final class RolePermissionsFormComponent extends FormComponent
         return true;
     }
 
+    public function hasAnyPermission(array $permissions){
+        foreach($permissions as $permission){
+            if($this->hasPermission($permission)){
+                return true;
+            }
+        }
+
+        return false;
+    }
+
     public function getCustomPermissions($resources): array
     {
         $customPermissions = $this->permissions;
