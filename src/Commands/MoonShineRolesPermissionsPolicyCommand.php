@@ -48,15 +48,15 @@ class MoonShineRolesPermissionsPolicyCommand extends MoonShineRolesPermissionsCo
             return 0;
         }
 
+        if (class_exists("App\Policies\\" . $this->modelName . "Policy")) {
+            $this->error("Policy for $this->modelName already exists!");
+            return 0;
+        }
+
         $this->resourceName = $this->modelName . "Resource";
 
         if (!class_exists("App\\MoonShine\\Resources\\$this->resourceName")) {
             $this->error("Resource $this->resourceName does not exist!");
-            return 0;
-        }
-
-        if (class_exists("App\Policies\\" . $this->modelName . "Policy")) {
-            $this->error("Policy for $this->modelName already exists!");
             return 0;
         }
 
@@ -78,11 +78,12 @@ class MoonShineRolesPermissionsPolicyCommand extends MoonShineRolesPermissionsCo
             '{namePolicy}' => $this->option('name') ?? $this->modelName . 'Policy',
         ]);
 
-        if($role = Role::first()?->name ?? false){
-            $this->call('moonshine-roles-perm:role', [
-                'name' => $role,
-            ]);
-        }
+        $roles = config('permission.models.role')::all()->pluck('name')->toArray();
+        $role = $this->choice('Select a role to grant policy rights', $roles, 0);
+
+        $this->call('moonshine-roles-perm:role', [
+            'name' => $role,
+        ]);
 
         $this->info('Policy generated successfully!');
 
