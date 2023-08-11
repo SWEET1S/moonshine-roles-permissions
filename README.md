@@ -88,6 +88,9 @@ use Spatie\Permission\Traits\HasRoles;
 class User extends Authenticatable
 {
     ...
+
+    const SUPER_ADMIN_ROLE_ID = 1;
+
     use HasRoles;
 
     protected $fillable = [
@@ -126,7 +129,7 @@ public function boot()
     ...
 
     Gate::before(function ($user, $ability) {
-        return $user?->role?->id === 1 ? true : null;
+        return $user?->role?->id === 1;
     });
 }
 ```

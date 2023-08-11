@@ -3,8 +3,6 @@
 namespace Sweet1s\MoonshineRolesPermissions\FormComponents;
 
 use MoonShine\FormComponents\FormComponent;
-use Spatie\Permission\Models\Permission;
-use Spatie\Permission\Models\Role;
 
 final class RolePermissionsFormComponent extends FormComponent
 {
@@ -13,7 +11,12 @@ final class RolePermissionsFormComponent extends FormComponent
 
     public function afterMake(): void
     {
-        $this->permissions = Permission::all()->pluck('name')->toArray();
+        $this->permissions = config('permission.models.permission')::all()->pluck('name')->toArray();
+    }
+
+    public function isSuperAdminRole($role)
+    {
+        return $role->id == config('moonshine.auth.providers.moonshine.model')::SUPER_ADMIN_ROLE_ID;
     }
 
     public function getPermissions(): array
@@ -31,19 +34,19 @@ final class RolePermissionsFormComponent extends FormComponent
         return $resourceName . "." . $ability;
     }
 
-    public function existHasPermission(Role $item, $permission)
-    {
-        return in_array($permission, $this->getPermissions()) ? $item->hasPermissionTo($permission) : false;
-    }
-
     public function existPermission(string $permission): bool
     {
         return in_array($permission, $this->getPermissions());
     }
 
-    public function hasPermission($permission)
+    public function existHasPermission($item, $permission): bool
     {
-        return $this->existPermission($permission) ? auth()?->user()?->role?->hasPermissionTo($permission) : false;
+        return $this->existPermission($permission) && (($this->isSuperAdminRole($item) || $item?->hasPermissionTo($permission)));
+    }
+
+    public function hasPermission($permission): bool
+    {
+        return $this->existPermission($permission) && (auth()?->user()?->role?->hasPermissionTo($permission) || $this->isSuperAdminRole(auth()?->user()?->role));
     }
 
     public function hasAnyResourcePermissions($resource): bool
@@ -64,7 +67,8 @@ final class RolePermissionsFormComponent extends FormComponent
         return true;
     }
 
-    public function hasAnyPermission(array $permissions){
+    public function hasAnyPermission(array $permissions): bool
+    {
         foreach($permissions as $permission){
             if($this->hasPermission($permission)){
                 return true;

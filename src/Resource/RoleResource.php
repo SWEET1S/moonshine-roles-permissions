@@ -65,7 +65,7 @@ class RoleResource extends Resource
     {
         return [
             RolePermissionsFormComponent::make('Permissions')
-                ->canSee(fn($user) => auth()?->user()->role->hasPermissionTo('RoleResource.update'))
+                ->canSee(fn($user) => auth()?->user()?->role?->id == config('moonshine.auth.providers.moonshine.model')::SUPER_ADMIN_ROLE_ID || auth()?->user()?->role?->hasPermissionTo('RoleResource.update'))
         ];
     }
 }

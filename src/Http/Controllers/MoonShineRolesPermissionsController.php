@@ -13,7 +13,7 @@ class MoonShineRolesPermissionsController extends Controller
         if($request->get('permissions') == null){
             $role->syncPermissions([]);
             MoonShineUI::toast(
-                __('moonshine::ui.saved'),
+                trans('moonshine::ui.saved'),
                 'success'
             );
             return back();
@@ -24,16 +24,16 @@ class MoonShineRolesPermissionsController extends Controller
 
         if($authUserRole == null){
             MoonShineUI::toast(
-                __('moonshine::ui.unauthorized'),
+                trans('moonshine::ui.unauthorized'),
                 'error'
             );
             return back();
         }
 
         foreach ($permissions as $permission) {
-            if(!$authUserRole?->hasPermissionTo($permission)){
+            if(!(config('moonshine.auth.providers.moonshine.model')::SUPER_ADMIN_ROLE_ID == $authUserRole->id) && !$authUserRole?->hasPermissionTo($permission)){
                 MoonShineUI::toast(
-                    __('moonshine::ui.unauthorized'),
+                    trans('moonshine::ui.unauthorized'),
                     'error'
                 );
                 return back();
@@ -43,7 +43,7 @@ class MoonShineRolesPermissionsController extends Controller
         $role->syncPermissions($permissions);
 
         MoonShineUI::toast(
-            __('moonshine::ui.saved'),
+            trans('moonshine::ui.saved'),
             'success'
         );
 
