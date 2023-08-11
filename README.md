@@ -61,13 +61,7 @@ composer require sweet1s/moonshine-roles-permissions
 ...
 ```
 
-4. Run the following command to install the package and follow the installation steps:
-
-```bash
-php artisan moonshine-roles-perm:install
-```
-
-5. In the permission config file, change the models.role to App\Models\Role::class (Model need extend
+4. In the permission config file, change the models.role to App\Models\Role::class (Model need extend
    \Spatie\Permission\Models\Role), like this:
 
 ```PHP
@@ -76,6 +70,12 @@ php artisan moonshine-roles-perm:install
     'role' => App\Models\Role::class,
 
 ],
+```
+
+5. Run the following command to install the package and follow the installation steps:
+
+```bash
+php artisan moonshine-roles-perm:install
 ```
 
 6. For the user model, add the following:
