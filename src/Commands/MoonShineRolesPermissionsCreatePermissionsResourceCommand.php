@@ -56,6 +56,8 @@ class MoonShineRolesPermissionsCreatePermissionsResourceCommand extends Command
             ]);
         }
 
+        $this->info("Permissions created successfully for $this->resourceName.");
+
         return 0;
     }
 
