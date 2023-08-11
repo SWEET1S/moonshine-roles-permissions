@@ -72,13 +72,7 @@ composer require sweet1s/moonshine-roles-permissions
 ],
 ```
 
-5. Run the following command to install the package and follow the installation steps:
-
-```bash
-php artisan moonshine-roles-perm:install
-```
-
-6. For the user model, add the following:
+5. For the user model, add the following:
 
 ```PHP
 <?php
@@ -111,6 +105,12 @@ class User extends Authenticatable
 
     ...
 }
+```
+
+6. Run the following command to install the package and follow the installation steps:
+
+```bash
+php artisan moonshine-roles-perm:install
 ```
 
 7. In the AuthServiceProvider.php file, add the following ( Super Admin Role ):
