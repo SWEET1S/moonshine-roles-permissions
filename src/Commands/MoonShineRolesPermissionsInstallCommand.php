@@ -34,6 +34,14 @@ class MoonShineRolesPermissionsInstallCommand extends Command
 
         $this->call('moonshine-roles-perm:publish');
 
+        $this->call('moonshine-roles-perm:permissions', [
+            'resourceName' => 'UserResource'
+        ]);
+
+        $this->call('moonshine-roles-perm:permissions', [
+            'resourceName' => 'RoleResource'
+        ]);
+
         $this->createRole();
 
         $this->info("\n");
