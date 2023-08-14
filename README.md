@@ -129,7 +129,7 @@ public function boot()
     ...
 
     Gate::before(function ($user, $ability) {
-        return $user?->role?->id === 1;
+        return $user?->role?->id === 1 ? true : null;
     });
 }
 ```
