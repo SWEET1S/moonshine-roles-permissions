@@ -62,7 +62,7 @@
                 </div>
             @endif
 
-            <div class="flex items-center justify-start space-x-4">
+            <div class="flex flex-wrap items-center justify-start space-x-4">
                 @foreach($element->getCustomPermissions(moonshine()->getResources()) as $key => $permission)
 
                     <div>
