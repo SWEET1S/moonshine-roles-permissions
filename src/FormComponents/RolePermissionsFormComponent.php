@@ -9,12 +9,23 @@ final class RolePermissionsFormComponent extends FormComponent
     protected array $permissions;
     protected static string $view = 'moonshine-roles-permissions::form-components.permissions';
 
+    protected array $permissionMethods = [
+        'viewAny',
+        'view',
+        'create',
+        'update',
+        'delete',
+        'restore',
+        'forceDelete',
+        'massDelete'
+    ];
+
     public function afterMake(): void
     {
         $this->permissions = config('permission.models.permission')::all()->pluck('name')->toArray();
     }
 
-    public function isSuperAdminRole($role)
+    public function isSuperAdminRole($role): bool
     {
         return $role->id == config('moonshine.auth.providers.moonshine.model')::SUPER_ADMIN_ROLE_ID;
     }
@@ -24,7 +35,7 @@ final class RolePermissionsFormComponent extends FormComponent
         return $this->permissions;
     }
 
-    public function existsPermissions(string $resourceName)
+    public function existsPermissions(string $resourceName): bool|int
     {
         return strpos(implode(' ', $this->getPermissions()), $resourceName);
     }
@@ -86,8 +97,10 @@ final class RolePermissionsFormComponent extends FormComponent
             $resourceName = class_basename($resource);
 
             foreach ($customPermissions as $custom) {
-                if (strpos($custom, $resourceName) !== false) {
-                    unset($customPermissions[array_search($custom, $customPermissions)]);
+                foreach ($this->permissionMethods as $method) {
+                    if (strpos($custom, $resourceName . "." . $method) !== false) {
+                        unset($customPermissions[array_search($custom, $customPermissions)]);
+                    }
                 }
             }
         }
