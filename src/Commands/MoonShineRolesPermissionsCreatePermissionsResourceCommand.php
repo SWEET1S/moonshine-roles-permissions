@@ -56,6 +56,8 @@ class MoonShineRolesPermissionsCreatePermissionsResourceCommand extends Command
             ]);
         }
 
+        app()['cache']->forget('spatie.permission.cache');
+
         $this->info("Permissions created successfully for $this->resourceName.");
 
         return 0;
