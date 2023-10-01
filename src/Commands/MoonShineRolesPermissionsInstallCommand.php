@@ -57,7 +57,7 @@ class MoonShineRolesPermissionsInstallCommand extends Command
 
         if ($response == 'yes') {
             $this->call('migrate', [
-               '--path' => 'database/migrations/create_or_supplement_users_table.php'
+                '--path' => 'vendor/sweet1s/moonshine-roles-permissions/database/migrations/create_or_supplement_users_table.php'
             ]);
         }
     }
