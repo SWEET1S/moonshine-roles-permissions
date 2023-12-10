@@ -4,6 +4,7 @@ namespace Sweet1s\MoonshineRBAC\Http\Controllers;
 
 use Illuminate\Http\Request;
 use MoonShine\Http\Controllers\MoonShineController;
+use MoonShine\MoonShineAuth;
 use MoonShine\MoonShineUI;
 use Spatie\Permission\Models\Role;
 
@@ -22,7 +23,7 @@ class MoonShineRBACController extends MoonShineController
             return back();
         }
 
-        $authUserRole = auth()?->user()?->role;
+        $authUserRole = MoonShineAuth::guard()->user()?->role;
 
         if ($authUserRole == null) {
             MoonShineUI::toast(
