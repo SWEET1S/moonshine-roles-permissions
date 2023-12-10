@@ -9,6 +9,7 @@ use MoonShine\Decorations\Column;
 use MoonShine\Decorations\Divider;
 use MoonShine\Decorations\Grid;
 use MoonShine\Fields\Switcher;
+use MoonShine\MoonShineAuth;
 use MoonShine\Resources\ModelResource;
 use MoonShine\Traits\HasResource;
 use MoonShine\Traits\WithLabel;
@@ -16,7 +17,6 @@ use MoonShine\Traits\WithLabel;
 final class RolePermissionsFormComponent extends MoonShineComponent
 {
     protected string $view = 'moonshine-rbac::form-components.permissions';
-    protected Model $item;
 
     use HasResource;
     use WithLabel;
@@ -43,8 +43,7 @@ final class RolePermissionsFormComponent extends MoonShineComponent
 
     public function getForm(): FormBuilder
     {
-
-        $currentUser = auth()?->user();
+        $currentUser = MoonShineAuth::guard()->user();
 
         $elements = [];
         $values = [];
@@ -59,7 +58,7 @@ final class RolePermissionsFormComponent extends MoonShineComponent
 
                 $permission = $class . '.' . $ability;
 
-                if (!$currentUser->role->hasPermissionTo($permission)) {
+                if (!$currentUser->role->isHavePermission($permission)) {
                     continue;
                 }
 
