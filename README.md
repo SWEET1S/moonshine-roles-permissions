@@ -52,14 +52,19 @@ composer require sweet1s/moonshine-roles-permissions
    admin panel.
 
 ```PHP
-...
-'providers' => [
-    'moonshine' => [
-        ...
-        'model'  => \App\Models\User::class,
+return [
+    // ...
+    'auth' => [
+        // ...
+        'providers' => [
+            'moonshine' => [
+                'driver' => 'eloquent',
+                'model' => \App\Models\User::class,
+            ],
+        ],
     ],
-],
-...
+    // ...
+];
 ```
 
 4. In the permission config file, change the models.role to App\Models\Role::class (Model need extend
@@ -67,7 +72,7 @@ composer require sweet1s/moonshine-roles-permissions
 
 ```PHP
 'models' => [
-    ...
+    // ...
     'role' => App\Models\Role::class,
 
 ],
@@ -80,7 +85,7 @@ composer require sweet1s/moonshine-roles-permissions
 
 namespace App\Models;
 
-...
+// ...
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 use App\Models\Role;
@@ -88,7 +93,7 @@ use Spatie\Permission\Traits\HasRoles;
 
 class User extends Authenticatable
 {
-    ...
+    // ...
 
     const SUPER_ADMIN_ROLE_ID = 1;
 
@@ -107,7 +112,7 @@ class User extends Authenticatable
         return $this->belongsTo(Role::class);
     }
 
-    ...
+    // ...
 }
 ```
 
@@ -120,14 +125,12 @@ php artisan moonshine-rbac:install
 7. In the AuthServiceProvider.php file, add the following ( Super Admin Role ):
 
 ```PHP
-...
+//...
 use Illuminate\Support\Facades\Gate;
-
-...
 
 public function boot()
 {
-    ...
+    // ...
 
     Gate::before(function ($user, $ability) {
         return $user?->role?->id === config('moonshine.auth.providers.moonshine.model')::SUPER_ADMIN_ROLE_ID ? true : null;
