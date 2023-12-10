@@ -46,7 +46,7 @@ final class MoonShineRBACServiceProvider extends ServiceProvider
                 $className = class_basename($model) . 'Resource';
                 $permission = $className . '.' . $ability;
 
-                return $user?->role?->hasPermissionTo($permission);
+                return $user?->role?->isHavePermission($permission);
             });
         }
     }
