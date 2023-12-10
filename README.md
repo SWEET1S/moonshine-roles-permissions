@@ -85,7 +85,26 @@ return [
 ],
 ```
 
-5. For the user model, add the following:
+5. For your role model, add the following:
+
+```PHP
+
+<?php
+
+namespace App\Models;
+
+use Spatie\Permission\Models\Role as SpatieRole;
+use Sweet1s\MoonshineRBAC\Traits\HasMoonShineRolePermissions;
+
+class Role extends SpatieRole
+{
+    use HasMoonShineRolePermissions;
+}
+
+
+```
+
+6. For the user model, add the following:
 
 ```PHP
 <?php
@@ -123,13 +142,13 @@ class User extends Authenticatable
 }
 ```
 
-6. Run the following command to install the package and follow the installation steps:
+7. Run the following command to install the package and follow the installation steps:
 
 ```bash
 php artisan moonshine-rbac:install
 ```
 
-7. In the AuthServiceProvider.php file, add the following ( Super Admin Role ):
+8. In the AuthServiceProvider.php file, add the following ( Super Admin Role ):
 
 ```PHP
 //...
@@ -145,13 +164,13 @@ public function boot()
 }
 ```
 
-8. (Optional) Create a user with new modal and assign automatically the role "Super Admin" to it.
+9. (Optional) Create a user with new modal and assign automatically the role "Super Admin" to it.
 
 ```bash
 php artisan moonshine-rbac:user
 ```
 
-9. Add new MoonShine resource to your MoonShineServiceProvider file, like this:
+10. Add new MoonShine resource to your MoonShineServiceProvider file, like this:
 
 ```PHP
 MenuGroup::make('System', [
