@@ -166,13 +166,7 @@ _You can use the following command to generate a resource and policy at the same
 php artisan moonshine-rbac:resource Post
 ```
 
-2. Generate a new policy for the model
-
-```bash
-php artisan moonshine-rbac:policy Post --name="PostPolicy"
-```
-
-3. For Resource, add the following:
+2. For Resource, add the following:
 
 ```PHP
 public static bool $withPolicy = true;
