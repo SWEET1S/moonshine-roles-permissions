@@ -12,7 +12,7 @@ use Sweet1s\MoonshineRBAC\Commands\MoonShineRBACResourceCommand;
 use Sweet1s\MoonshineRBAC\Commands\MoonShineRBACRoleCreateCommand;
 use Sweet1s\MoonshineRBAC\Commands\MoonShineRBACUserCommand;
 
-final class MoonShineRolesPermissionsServiceProvider extends ServiceProvider
+final class MoonShineRBACServiceProvider extends ServiceProvider
 {
 
     protected array $commands = [

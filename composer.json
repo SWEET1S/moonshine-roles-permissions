@@ -42,7 +42,7 @@
     "extra": {
         "laravel": {
             "providers": [
-                "Sweet1s\\MoonshineRBAC\\Providers\\MoonShineRolesPermissionsServiceProvider"
+                "Sweet1s\\MoonshineRBAC\\Providers\\MoonShineRBACServiceProvider"
             ]
         }
     }
