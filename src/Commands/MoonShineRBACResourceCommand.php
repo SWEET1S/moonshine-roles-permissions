@@ -39,7 +39,7 @@ class MoonShineRBACResourceCommand extends Command
             $name .= 'Resource';
         }
 
-        $this->call('moonshine-rbac:policy', [
+        $this->call('moonshine-rbac:permissions', [
             'model' => $name
         ]);
 
