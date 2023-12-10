@@ -30,7 +30,8 @@ final class RolePermissionsFormComponent extends MoonShineComponent
     public function __construct(
         Closure|string $label,
         ModelResource  $resource
-    ) {
+    )
+    {
         $this->setResource($resource);
         $this->setLabel($label);
     }
@@ -92,7 +93,7 @@ final class RolePermissionsFormComponent extends MoonShineComponent
             ])->columnSpan(6);
         }
 
-        return FormBuilder::make(route('moonshine-rbac.attach-permissions-to-role', $this->getItem()->getKey()))
+        return FormBuilder::make(route('moonshine-rbac.roles.attach-permissions-to-role', $this->getItem()->getKey()))
             ->fields([
                 Switcher::make('All')->customAttributes([
                     '@change' => <<<'JS'
