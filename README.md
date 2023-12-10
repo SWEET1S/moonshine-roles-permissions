@@ -148,32 +148,16 @@ class User extends Authenticatable
 php artisan moonshine-rbac:install
 ```
 
-8. In the AuthServiceProvider.php file, add the following ( Super Admin Role ):
-
-```PHP
-//...
-use Illuminate\Support\Facades\Gate;
-
-public function boot()
-{
-    // ...
-
-    Gate::before(function ($user, $ability) {
-        return $user?->role?->id === config('moonshine.auth.providers.moonshine.model')::SUPER_ADMIN_ROLE_ID ? true : null;
-    });
-}
-```
-
-9. (Optional) Create a user with new modal and assign automatically the role "Super Admin" to it.
+8. (Optional) Create a user with new modal and assign automatically the role "Super Admin" to it.
 
 ```bash
 php artisan moonshine-rbac:user
 ```
 
-10. Add new MoonShine resource to your MoonShineServiceProvider file, like this:
+9. Add new MoonShine resource to your MoonShineServiceProvider file, like this:
 
 ```PHP
-MenuGroup::make('System', [
+    MenuGroup::make('System', [
         MenuItem::make('Admins', new \Sweet1s\MoonshineRBAC\Resource\UserResource(), 'heroicons.outline.users'),
         MenuItem::make('Roles', new \Sweet1s\MoonshineRBAC\Resource\RoleResource(), 'heroicons.outline.shield-exclamation'),
     ], 'heroicons.outline.user-group'),
@@ -199,7 +183,15 @@ php artisan moonshine-rbac:resource Post
 2. For Resource, add the following:
 
 ```PHP
-public static bool $withPolicy = true;
+// ...
+use Sweet1s\MoonshineRBAC\Traits\WithRolePermissions;
+
+class ArticleResource extends ModelResource
+{
+    use WithRolePermissions;
+
+    // ...
+}
 ```
 
 ---

@@ -12,14 +12,15 @@ use MoonShine\Fields\ID;
 use MoonShine\Fields\Text;
 use MoonShine\Resources\ModelResource;
 use Sweet1s\MoonshineRBAC\FormComponents\RolePermissionsFormComponent;
+use Sweet1s\MoonshineRBAC\Traits\WithRolePermissions;
 
 class RoleResource extends ModelResource
 {
+    use WithRolePermissions;
+
     public string $model = Role::class;
 
     public string $titleField = 'name';
-
-    public bool $withPolicy = true;
 
     public function title(): string
     {

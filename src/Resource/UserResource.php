@@ -17,13 +17,14 @@ use MoonShine\Fields\Relationships\BelongsTo;
 use MoonShine\Fields\Text;
 use MoonShine\FormComponents\ChangeLogFormComponent;
 use MoonShine\Resources\ModelResource;
+use Sweet1s\MoonshineRBAC\Traits\WithRolePermissions;
 
 class UserResource extends ModelResource
 {
+    use WithRolePermissions;
+
     public string $model = User::class;
     public string $titleField = 'name';
-    public bool $withPolicy = true;
-
     protected array $with = ['role'];
 
     public function title(): string

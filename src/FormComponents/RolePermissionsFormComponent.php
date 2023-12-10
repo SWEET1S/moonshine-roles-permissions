@@ -56,14 +56,13 @@ final class RolePermissionsFormComponent extends MoonShineComponent
 
             foreach ($resource->gateAbilities() as $ability) {
 
-                $permission = $class . '.' . $ability;
-
-                if (!$currentUser->role->isHavePermission($permission)) {
+                if (!$currentUser->role->isHavePermission($class, $ability)) {
                     continue;
                 }
 
-                $values['permissions'][$class][$ability] = $this->getItem()?->hasPermissionTo(
-                    $permission
+                $values['permissions'][$class][$ability] = $this->getItem()?->isHavePermission(
+                    $class,
+                    $ability
                 );
 
                 if (!$values['permissions'][$class][$ability]) {

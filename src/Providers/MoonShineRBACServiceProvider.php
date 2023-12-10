@@ -2,15 +2,17 @@
 
 namespace Sweet1s\MoonshineRBAC\Providers;
 
-use Illuminate\Support\Facades\Gate;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\ServiceProvider;
-use Sweet1s\MoonshineRBAC\Abilities;
+use MoonShine\Contracts\Resources\ResourceContract;
+use MoonShine\MoonShine;
 use Sweet1s\MoonshineRBAC\Commands\MoonShineRBACAssignPermissionCommand;
 use Sweet1s\MoonshineRBAC\Commands\MoonShineRBACCreatePermissionsResourceCommand;
 use Sweet1s\MoonshineRBAC\Commands\MoonShineRBACInstallCommand;
 use Sweet1s\MoonshineRBAC\Commands\MoonShineRBACResourceCommand;
 use Sweet1s\MoonshineRBAC\Commands\MoonShineRBACRoleCreateCommand;
 use Sweet1s\MoonshineRBAC\Commands\MoonShineRBACUserCommand;
+use Sweet1s\MoonshineRBAC\Traits\WithRolePermissions;
 
 final class MoonShineRBACServiceProvider extends ServiceProvider
 {
@@ -41,13 +43,24 @@ final class MoonShineRBACServiceProvider extends ServiceProvider
             $this->commands($this->commands);
         }
 
-        foreach (Abilities::getAbilities() as $ability) {
-            Gate::define($ability, function ($user, $model) use ($ability) {
-                $className = class_basename($model) . 'Resource';
-                $permission = $className . '.' . $ability;
+        MoonShine::defineAuthorization(
+            static function (ResourceContract $resource, Model $user, string $ability): bool {
 
-                return $user?->role?->isHavePermission($permission);
-            });
-        }
+                $hasRolePermissions = in_array(
+                    WithRolePermissions::class,
+                    class_uses_recursive($resource),
+                    true
+                );
+
+                if (!$hasRolePermissions) {
+                    return true;
+                }
+
+                return $user?->role->isHavePermission(
+                    class_basename($resource::class),
+                    $ability
+                );
+            }
+        );
     }
 }
