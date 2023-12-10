@@ -5,21 +5,21 @@ declare(strict_types=1);
 namespace Sweet1s\MoonshineRolesPermissions\Resource;
 
 use App\Models\Role;
-
 use MoonShine\Decorations\Block;
+use MoonShine\Enums\Layer;
+use MoonShine\Enums\PageType;
 use MoonShine\Fields\ID;
 use MoonShine\Fields\Text;
-use MoonShine\Filters\TextFilter;
-use MoonShine\Resources\Resource;
+use MoonShine\Resources\ModelResource;
 use Sweet1s\MoonshineRolesPermissions\FormComponents\RolePermissionsFormComponent;
 
-class RoleResource extends Resource
+class RoleResource extends ModelResource
 {
-    public static string $model = Role::class;
+    public string $model = Role::class;
 
     public string $titleField = 'name';
 
-    public static bool $withPolicy = true;
+    public bool $withPolicy = true;
 
     public function title(): string
     {
@@ -52,20 +52,22 @@ class RoleResource extends Resource
     public function filters(): array
     {
         return [
-            TextFilter::make(trans('moonshine::ui.resource.role_name'), 'name'),
+            Text::make(trans('moonshine::ui.resource.role_name'), 'name'),
         ];
     }
 
-    public function actions(): array
+    protected function onBoot(): void
     {
-        return [];
-    }
+        parent::onBoot();
 
-    public function components(): array
-    {
-        return [
-            RolePermissionsFormComponent::make('Permissions')
-                ->canSee(fn($user) => auth()?->user()?->role?->id == config('moonshine.auth.providers.moonshine.model')::SUPER_ADMIN_ROLE_ID || auth()?->user()?->role?->hasPermissionTo('RoleResource.update'))
-        ];
+        $this->getPages()
+            ->findByUri(PageType::FORM->value)
+            ->pushToLayer(
+                layer: Layer::BOTTOM,
+                component: RolePermissionsFormComponent::make(
+                    'Permissions',
+                    $this,
+                )
+            );
     }
 }

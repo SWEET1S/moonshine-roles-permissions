@@ -11,7 +11,7 @@ class MoonShineRolesPermissionsInstallCommand extends Command
      *
      * @var string
      */
-    protected $signature = 'moonshine-roles-perm:install';
+    protected $signature = 'moonshine-rbac:install';
 
     /**
      * The console command description.
@@ -31,8 +31,6 @@ class MoonShineRolesPermissionsInstallCommand extends Command
         $this->info('Installing MoonShine Roles-Permissions package...');
 
         $this->migration();
-
-        $this->call('moonshine-roles-perm:publish');
 
         $this->call('moonshine-roles-perm:permissions', [
             'resourceName' => 'UserResource'
@@ -64,13 +62,12 @@ class MoonShineRolesPermissionsInstallCommand extends Command
 
     public function createRole(): void
     {
-        if(config('permission.models.role')::first() == null){
-            $this->call('moonshine-roles-perm:role',[
+        if (config('permission.models.role')::first() == null) {
+            $this->call('moonshine-roles-perm:role', [
                 'name' => 'Super Admin'
             ]);
 
             $this->info("Super Admin role created successfully.");
         }
     }
-
 }

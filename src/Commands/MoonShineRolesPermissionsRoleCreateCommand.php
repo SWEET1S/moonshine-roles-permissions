@@ -9,7 +9,7 @@ class MoonShineRolesPermissionsRoleCreateCommand extends MoonShineRolesPermissio
      *
      * @var string
      */
-    protected $signature = 'moonshine-roles-perm:role {name}';
+    protected $signature = 'moonshine-rbac:role {name}';
 
     /**
      * The console command description.
@@ -38,6 +38,4 @@ class MoonShineRolesPermissionsRoleCreateCommand extends MoonShineRolesPermissio
 
         return 0;
     }
-
-
 }

@@ -3,34 +3,28 @@
 namespace Sweet1s\MoonshineRolesPermissions\Resource;
 
 use App\Models\User as User;
-
 use Illuminate\Validation\Rule;
-use MoonShine\Actions\ExportAction;
 use MoonShine\Decorations\Block;
 use MoonShine\Decorations\Column;
 use MoonShine\Decorations\Grid;
-use MoonShine\Fields\BelongsTo;
 use MoonShine\Fields\Date;
 use MoonShine\Fields\Email;
 use MoonShine\Fields\ID;
 use MoonShine\Fields\Image;
 use MoonShine\Fields\Password;
 use MoonShine\Fields\PasswordRepeat;
+use MoonShine\Fields\Relationships\BelongsTo;
 use MoonShine\Fields\Text;
-use MoonShine\Filters\DateFilter;
-use MoonShine\Filters\TextFilter;
 use MoonShine\FormComponents\ChangeLogFormComponent;
-use MoonShine\Resources\Resource;
-use MoonShine\Traits\Resource\WithUserPermissions;
+use MoonShine\Resources\ModelResource;
 
-class UserResource extends Resource
+class UserResource extends ModelResource
 {
-    use WithUserPermissions;
-
-    public static string $model = User::class;
-    protected static bool $system = true;
+    public string $model = User::class;
     public string $titleField = 'name';
-    public static bool $withPolicy = true;
+    public bool $withPolicy = true;
+
+    protected array $with = ['role'];
 
     public function title(): string
     {
@@ -52,9 +46,10 @@ class UserResource extends Resource
 
                             BelongsTo::make(
                                 trans('moonshine::ui.resource.role'),
-                                'role_id',
+                                'role',
                                 'name'
                             )
+                                ->nullable()
                                 ->showOnExport(),
 
                             Text::make(
@@ -146,7 +141,6 @@ class UserResource extends Resource
     {
         return [
             'name' => 'required',
-            'role_id' => 'required',
             'email' => [
                 'sometimes',
                 'bail',
@@ -168,18 +162,11 @@ class UserResource extends Resource
     public function filters(): array
     {
         return [
-            TextFilter::make(trans('moonshine::ui.resource.name'), 'name'),
-            DateFilter::make(
+            Text::make(trans('moonshine::ui.resource.name'), 'name'),
+            Date::make(
                 trans('moonshine::ui.resource.created_at'),
                 'created_at'
             ),
-        ];
-    }
-
-    public function actions(): array
-    {
-        return [
-            ExportAction::make(trans('moonshine::ui.export')),
         ];
     }
 }

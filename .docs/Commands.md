@@ -16,70 +16,48 @@ This command generates a permissions file for the specified resource.
 
 Required parameters:
 
-- resourceName: The name of the resource for which the permissions file will be generated.
+-   resourceName: The name of the resource for which the permissions file will be generated.
 
 ---
 
-### 3) Command: `php artisan moonshine-roles-perm:policy {model} {--name=}`
-
-This command generates a policy file for the specified model.
-
-Required parameters:
-
-- model: The name of the model for which the policy file will be generated.
-
-Optional parameters:
-
-- name: The name of the policy file. If not specified, the name will be the name of the model with the suffix "Policy".
-
----
-
-### 4) Command: `php artisan moonshine-roles-perm:publish`
-
-This command publishes the UserResource / RoleResource and UserPolicy / RolePolicy. Command create permissions
-UserResource.* / RoleResource.*.
-
----
-
-### 5) Command: `php artisan moonshine-roles-perm:role {name}`
+### 3) Command: `php artisan moonshine-roles-perm:role {name}`
 
 This command creates a new role with all existing permissions.
 
 Required parameters:
 
-- name: The name of the role.
+-   name: The name of the role.
 
 ---
 
-### 6) Command: `php artisan moonshine-roles-perm:user`
+### 4) Command: `php artisan moonshine-roles-perm:user`
 
 This command creates a new user with possibility to assign role.
 
 ---
 
-### 7) Command: `php artisan moonshine-roles-perm:assign {permission} {guard?}`
+### 5) Command: `php artisan moonshine-roles-perm:assign {permission} {guard?}`
 
 This command assigns a permission to a role. If the permission does not exist, you will be prompted to create it.
 
 Required parameters:
 
-- permission: The name of the permission.
+-   permission: The name of the permission.
 
 Optional parameters:
 
-- guard: The name of the guard. If not specified, the default guard will be used.
+-   guard: The name of the guard. If not specified, the default guard will be used.
 
 ---
 
-### 8) Command: `php artisan moonshine-roles-perm:resource {name?} {--m|model=} {--t|title=} {--s|singleton} {--id=}`
+### 6) Command: `php artisan moonshine-roles-perm:resource {name?} {--m|model=} {--t|title=} {--s|singleton} {--id=}`
 
 This command creates a new resource with policy and permissions.
 
 Optional parameters:
 
-- name: The name of the resource. If not specified, you will be prompted to enter it.
-- model: The name of the model. If not specified, the name of the resource will be used.
-- title: The title of the resource. If not specified, the name of the resource will be used.
-- singleton: If specified, the resource will be created as a singleton.
-- id: The name of the id column. If not specified, the default id column will be used.
-
+-   name: The name of the resource. If not specified, you will be prompted to enter it.
+-   model: The name of the model. If not specified, the name of the resource will be used.
+-   title: The title of the resource. If not specified, the name of the resource will be used.
+-   singleton: If specified, the resource will be created as a singleton.
+-   id: The name of the id column. If not specified, the default id column will be used.

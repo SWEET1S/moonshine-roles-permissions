@@ -3,6 +3,7 @@
 namespace Sweet1s\MoonshineRolesPermissions\Commands;
 
 use Illuminate\Console\Command;
+use Sweet1s\MoonshineRolesPermissions\Abilities;
 
 class MoonShineRolesPermissionsCreatePermissionsResourceCommand extends Command
 {
@@ -11,7 +12,7 @@ class MoonShineRolesPermissionsCreatePermissionsResourceCommand extends Command
      *
      * @var string
      */
-    protected $signature = 'moonshine-roles-perm:permissions {resourceName : The name of the resource like UserResource}';
+    protected $signature = 'moonshine-rbac:permissions {resourceName : The name of the resource like UserResource}';
 
     /**
      * The console command description.
@@ -19,20 +20,6 @@ class MoonShineRolesPermissionsCreatePermissionsResourceCommand extends Command
      * @var string
      */
     protected $description = 'Generate permissions for the resources';
-
-    /**
-     * @var array|string[]
-     */
-    protected array $permissions = [
-        'viewAny',
-        'view',
-        'create',
-        'update',
-        'delete',
-        'restore',
-        'forceDelete',
-        'massDelete'
-    ];
 
     /**
      * @var string
@@ -49,9 +36,9 @@ class MoonShineRolesPermissionsCreatePermissionsResourceCommand extends Command
 
         $this->resourceName = $this->argument('resourceName');
 
-        foreach ($this->permissions as $permission) {
+        foreach (Abilities::getAbilities() as $ability) {
             config('permission.models.permission')::updateOrCreate([
-                'name' => "$this->resourceName.$permission",
+                'name' => "$this->resourceName.$ability",
                 'guard_name' => config('moonshine.auth.guard')
             ]);
         }
@@ -62,6 +49,4 @@ class MoonShineRolesPermissionsCreatePermissionsResourceCommand extends Command
 
         return 0;
     }
-
-
 }

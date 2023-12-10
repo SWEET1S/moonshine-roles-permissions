@@ -13,14 +13,14 @@ permissions on a role-based level rather than individually assigning them to eac
 
 ## Features
 
-- [x] Role-Based Access Control (RBAC): Enhance your MoonShine Admin Panel with a comprehensive role-based permission
-  system, allowing you to group users with similar permissions into roles and manage access more efficiently.
-- [x] Role Assignment: Seamlessly associate permissions with roles, making it effortless to define the access rights for
-  specific groups of users.
-- [X] Bulk Role Assignment: Grant multiple users the same role simultaneously, reducing the manual effort required to
-  manage permissions across large user bases.
-- [x] Seamless Integration: The package seamlessly integrates with the MoonShine Admin Panel and extends the
-  capabilities of the Spatie Laravel Permissions package specifically for this panel.
+-   [x] Role-Based Access Control (RBAC): Enhance your MoonShine Admin Panel with a comprehensive role-based permission
+        system, allowing you to group users with similar permissions into roles and manage access more efficiently.
+-   [x] Role Assignment: Seamlessly associate permissions with roles, making it effortless to define the access rights for
+        specific groups of users.
+-   [x] Bulk Role Assignment: Grant multiple users the same role simultaneously, reducing the manual effort required to
+        manage permissions across large user bases.
+-   [x] Seamless Integration: The package seamlessly integrates with the MoonShine Admin Panel and extends the
+        capabilities of the Spatie Laravel Permissions package specifically for this panel.
 
 ---
 
@@ -28,7 +28,7 @@ permissions on a role-based level rather than individually assigning them to eac
 
 Before using the package, it is crucial to understand that you need to use a different user model instead of "
 MoonShineUser". Also, you can extend the MoonshineUser model and use the **moonshine_users table**, but you must add the
-column **role_id** and specify in your new User model ```protected $table = "moonshine_users"```. The package requires
+column **role_id** and specify in your new User model `protected $table = "moonshine_users"`. The package requires
 the utilization of the Spatie Laravel Permission package and an empty **"moonshine_user_permissions"** table. Please
 note that when the "moonshine_user_permissions" table contains other permissions for users, MoonShine Admin Panel
 utilizes its internal Policy implementation, disregarding any existing Policy defined in "App/Policy."
@@ -113,7 +113,7 @@ class User extends Authenticatable
 6. Run the following command to install the package and follow the installation steps:
 
 ```bash
-php artisan moonshine-roles-perm:install
+php artisan moonshine-rbac:install
 ```
 
 7. In the AuthServiceProvider.php file, add the following ( Super Admin Role ):
@@ -129,7 +129,7 @@ public function boot()
     ...
 
     Gate::before(function ($user, $ability) {
-        return $user?->role?->id === 1 ? true : null;
+        return $user?->role?->id === config('moonshine.auth.providers.moonshine.model')::SUPER_ADMIN_ROLE_ID ? true : null;
     });
 }
 ```
@@ -137,7 +137,7 @@ public function boot()
 8. (Optional) Create a user with new modal and assign automatically the role "Super Admin" to it.
 
 ```bash
-php artisan moonshine-roles-perm:user
+php artisan moonshine-rbac:user
 ```
 
 9. Add new MoonShine resource to your MoonShineServiceProvider file, like this:
@@ -163,13 +163,13 @@ php artisan moonshine:resource Post
 _You can use the following command to generate a resource and policy at the same time:_
 
 ```bash
-php artisan moonshine-roles-perm:resource Post
+php artisan moonshine-rbac:resource Post
 ```
 
 2. Generate a new policy for the model
 
 ```bash
-php artisan moonshine-roles-perm:policy Post --name="PostPolicy"
+php artisan moonshine-rbac:policy Post --name="PostPolicy"
 ```
 
 3. For Resource, add the following:
@@ -179,10 +179,11 @@ public static bool $withPolicy = true;
 ```
 
 ---
+
 ## Custom Permissions
 
 You can simply create them in the database or by using the command
-__php artisan moonshine-roles-perm:permissions {resourceName}__.
+**php artisan moonshine-rbac:permissions {resourceName}**.
 You can replace resourceName with any word you prefer.
 For example, if resourceName is set to "Database", then 8 permissions
 (view, viewAny, create, update, delete, restore, forceDelete, massDelete)

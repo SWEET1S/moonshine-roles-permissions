@@ -2,12 +2,12 @@
 
 namespace Sweet1s\MoonshineRolesPermissions\Providers;
 
+use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\ServiceProvider;
+use Sweet1s\MoonshineRolesPermissions\Abilities;
 use Sweet1s\MoonshineRolesPermissions\Commands\MoonShineRolesPermissionsAssignPermissionCommand;
 use Sweet1s\MoonshineRolesPermissions\Commands\MoonShineRolesPermissionsCreatePermissionsResourceCommand;
 use Sweet1s\MoonshineRolesPermissions\Commands\MoonShineRolesPermissionsInstallCommand;
-use Sweet1s\MoonshineRolesPermissions\Commands\MoonShineRolesPermissionsPolicyCommand;
-use Sweet1s\MoonshineRolesPermissions\Commands\MoonShineRolesPermissionsPublishCommand;
 use Sweet1s\MoonshineRolesPermissions\Commands\MoonShineRolesPermissionsResourceCommand;
 use Sweet1s\MoonshineRolesPermissions\Commands\MoonShineRolesPermissionsRoleCreateCommand;
 use Sweet1s\MoonshineRolesPermissions\Commands\MoonShineRolesPermissionsUserCommand;
@@ -16,10 +16,8 @@ final class MoonShineRolesPermissionsServiceProvider extends ServiceProvider
 {
 
     protected array $commands = [
-        MoonShineRolesPermissionsPolicyCommand::class,
         MoonShineRolesPermissionsAssignPermissionCommand::class,
         MoonShineRolesPermissionsInstallCommand::class,
-        MoonShineRolesPermissionsPublishCommand::class,
         MoonShineRolesPermissionsRoleCreateCommand::class,
         MoonShineRolesPermissionsUserCommand::class,
         MoonShineRolesPermissionsAssignPermissionCommand::class,
@@ -42,6 +40,15 @@ final class MoonShineRolesPermissionsServiceProvider extends ServiceProvider
 
         if ($this->app->runningInConsole()) {
             $this->commands($this->commands);
+        }
+
+        foreach (Abilities::getAbilities() as $ability) {
+            Gate::define($ability, function ($user, $model) use ($ability) {
+                $className = class_basename($model) . 'Resource';
+                $permission = $className . '.' . $ability;
+
+                return $user?->role?->hasPermissionTo($permission);
+            });
         }
     }
 }

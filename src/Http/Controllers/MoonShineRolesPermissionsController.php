@@ -3,15 +3,18 @@
 namespace Sweet1s\MoonshineRolesPermissions\Http\Controllers;
 
 use Illuminate\Http\Request;
-use Illuminate\Routing\Controller;
+use MoonShine\Http\Controllers\MoonShineController;
 use MoonShine\MoonShineUI;
 use Spatie\Permission\Models\Role;
 
-class MoonShineRolesPermissionsController extends Controller
+class MoonShineRolesPermissionsController extends MoonShineController
 {
-    public function attachPermissionsToRole(Request $request, Role $role){
-        if($request->get('permissions') == null){
+    public function attachPermissionsToRole(Request $request, Role $role)
+    {
+
+        if ($request->get('permissions') == null) {
             $role->syncPermissions([]);
+
             MoonShineUI::toast(
                 trans('moonshine::ui.saved'),
                 'success'
@@ -19,10 +22,9 @@ class MoonShineRolesPermissionsController extends Controller
             return back();
         }
 
-        $permissions = array_keys($request->get('permissions'));
         $authUserRole = auth()?->user()?->role;
 
-        if($authUserRole == null){
+        if ($authUserRole == null) {
             MoonShineUI::toast(
                 trans('moonshine::ui.unauthorized'),
                 'error'
@@ -30,12 +32,25 @@ class MoonShineRolesPermissionsController extends Controller
             return back();
         }
 
+        $permissions = [];
+
+        foreach ($request->get('permissions') as $resource => $abilities) {
+
+            foreach ($abilities as $ability => $value) {
+
+                if ($value == '1') {
+                    $permissions[] = $resource . '.' . $ability;
+                }
+            }
+        }
+
         foreach ($permissions as $permission) {
-            if(!(config('moonshine.auth.providers.moonshine.model')::SUPER_ADMIN_ROLE_ID == $authUserRole->id) && !$authUserRole?->hasPermissionTo($permission)){
+            if (!(config('moonshine.auth.providers.moonshine.model')::SUPER_ADMIN_ROLE_ID == $authUserRole->id) && !$authUserRole?->hasPermissionTo($permission)) {
                 MoonShineUI::toast(
                     trans('moonshine::ui.unauthorized'),
                     'error'
                 );
+
                 return back();
             }
         }

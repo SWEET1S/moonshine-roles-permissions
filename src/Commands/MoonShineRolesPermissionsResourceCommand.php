@@ -11,7 +11,7 @@ class MoonShineRolesPermissionsResourceCommand extends Command
      *
      * @var string
      */
-    protected $signature = 'moonshine-roles-perm:resource {name?} {--m|model=} {--t|title=} {--s|singleton} {--id=}';
+    protected $signature = 'moonshine-rbac:resource {name?} {--m|model=} {--t|title=} {--s|singleton} {--id=}';
 
     /**
      * The console command description.
@@ -41,6 +41,4 @@ class MoonShineRolesPermissionsResourceCommand extends Command
 
         return 0;
     }
-
-
 }

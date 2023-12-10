@@ -2,109 +2,123 @@
 
 namespace Sweet1s\MoonshineRolesPermissions\FormComponents;
 
-use MoonShine\FormComponents\FormComponent;
+use Illuminate\Database\Eloquent\Model;
+use MoonShine\Components\FormBuilder;
+use MoonShine\Components\MoonShineComponent;
+use MoonShine\Decorations\Column;
+use MoonShine\Decorations\Divider;
+use MoonShine\Decorations\Grid;
+use MoonShine\Fields\Switcher;
+use MoonShine\Resources\ModelResource;
+use MoonShine\Traits\HasResource;
+use MoonShine\Traits\WithLabel;
 
-final class RolePermissionsFormComponent extends FormComponent
+final class RolePermissionsFormComponent extends MoonShineComponent
 {
-    protected array $permissions;
-    protected static string $view = 'moonshine-roles-permissions::form-components.permissions';
+    protected string $view = 'moonshine-roles-permissions::form-components.permissions';
+    protected Model $item;
 
-    protected array $permissionMethods = [
-        'viewAny',
-        'view',
-        'create',
-        'update',
-        'delete',
-        'restore',
-        'forceDelete',
-        'massDelete'
+    use HasResource;
+    use WithLabel;
+
+    protected $except = [
+        'getItem',
+        'getResource',
+        'getForm',
     ];
 
-    public function afterMake(): void
-    {
-        $this->permissions = config('permission.models.permission')::all()->pluck('name')->toArray();
+    public function __construct(
+        Closure|string $label,
+        ModelResource  $resource
+    ) {
+        $this->setResource($resource);
+        $this->setLabel($label);
     }
 
-    public function isSuperAdminRole($role): bool
+    public function getItem(): Model
     {
-        return $role->id == config('moonshine.auth.providers.moonshine.model')::SUPER_ADMIN_ROLE_ID;
+        return $this->getResource()->getItemOrInstance();
     }
 
-    public function getPermissions(): array
+    public function getForm(): FormBuilder
     {
-        return $this->permissions;
-    }
 
-    public function existsPermissions(string $resourceName): bool|int
-    {
-        return strpos(implode(' ', $this->getPermissions()), $resourceName);
-    }
+        $currentUser = auth()?->user();
 
-    public function getPermissionName(string $resourceName, string $ability): string
-    {
-        return $resourceName . "." . $ability;
-    }
+        $elements = [];
+        $values = [];
+        $all = true;
 
-    public function existPermission(string $permission): bool
-    {
-        return in_array($permission, $this->getPermissions());
-    }
+        foreach (moonshine()->getResources() as $resource) {
+            $checkboxes = [];
+            $class = class_basename($resource::class);
+            $allSections = true;
 
-    public function existHasPermission($item, $permission): bool
-    {
-        return $this->existPermission($permission) && (($this->isSuperAdminRole($item) || $item?->hasPermissionTo($permission)));
-    }
+            foreach ($resource->gateAbilities() as $ability) {
 
-    public function hasPermission($permission): bool
-    {
-        return $this->existPermission($permission) && (auth()?->user()?->role?->hasPermissionTo($permission) || $this->isSuperAdminRole(auth()?->user()?->role));
-    }
+                $permission = $class . '.' . $ability;
 
-    public function hasAnyResourcePermissions($resource): bool
-    {
-        $notHavePermission = 0;
-        $resourceName = class_basename($resource);
-
-        foreach ($resource->gateAbilities() as $ability) {
-            if (!$this->hasPermission($this->getPermissionName($resourceName, $ability))) {
-                $notHavePermission++;
-            }
-
-            if ($notHavePermission == count($resource->gateAbilities())) {
-                return false;
-            }
-        }
-
-        return true;
-    }
-
-    public function hasAnyPermission(array $permissions): bool
-    {
-        foreach($permissions as $permission){
-            if($this->hasPermission($permission)){
-                return true;
-            }
-        }
-
-        return false;
-    }
-
-    public function getCustomPermissions($resources): array
-    {
-        $customPermissions = $this->permissions;
-
-        foreach ($resources as $resource) {
-            $resourceName = class_basename($resource);
-
-            foreach ($customPermissions as $custom) {
-                foreach ($this->permissionMethods as $method) {
-                    if (strpos($custom, $resourceName . "." . $method) !== false) {
-                        unset($customPermissions[array_search($custom, $customPermissions)]);
-                    }
+                if (!$currentUser->role->hasPermissionTo($permission)) {
+                    continue;
                 }
+
+                $values['permissions'][$class][$ability] = $this->getItem()?->hasPermissionTo(
+                    $permission
+                );
+
+                if (!$values['permissions'][$class][$ability]) {
+                    $allSections = false;
+                    $all = false;
+                }
+
+                $checkboxes[] = Switcher::make(
+                    $ability,
+                    "permissions." . $class . ".$ability"
+                )
+                    ->customAttributes(['class' => 'permission_switcher ' . $class])
+                    ->setName("permissions[" . $class . "][$ability]");
             }
+
+            $elements[] = Column::make([
+                Switcher::make($resource->title())->customAttributes([
+                    'class' => 'permission_switcher_section',
+                    '@change' => "document
+                          .querySelectorAll('.$class')
+                          .forEach((el) => {el.checked = parseInt(event.target.value); el.dispatchEvent(new Event('change'))})",
+                ])->setValue($allSections)->hint('Toggle off/on all'),
+
+                ...$checkboxes,
+                Divider::make(),
+            ])->columnSpan(6);
         }
 
-        return $customPermissions;
+        return FormBuilder::make(route('moonshine-roles-permissions.roles.attach-permissions-to-role', $this->getItem()->getKey()))
+            ->fields([
+                Switcher::make('All')->customAttributes([
+                    '@change' => <<<'JS'
+                        document
+                          .querySelectorAll('.permission_switcher, .permission_switcher_section')
+                          .forEach((el) => {el.checked = parseInt(event.target.value); el.dispatchEvent(new Event('change'))})
+                    JS,
+                ])->setValue($all),
+                Divider::make(),
+                Grid::make(
+                    $elements
+                ),
+            ])
+            ->fill($values)
+            ->submit(__('moonshine::ui.save'));
+    }
+
+    protected function viewData(): array
+    {
+        return [
+            'label' => $this->label(),
+            'form' => $this->getItem()?->exists
+                ? $this->getForm()
+                : '',
+            'item' => $this->getItem(),
+            'resource' => $this->getResource(),
+        ];
     }
 }

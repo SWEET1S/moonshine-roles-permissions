@@ -12,7 +12,7 @@ class MoonShineRolesPermissionsUserCommand extends Command
      *
      * @var string
      */
-    protected $signature = 'moonshine-roles-perm:user';
+    protected $signature = 'moonshine-rbac:user';
 
     /**
      * The console command description.
@@ -40,12 +40,12 @@ class MoonShineRolesPermissionsUserCommand extends Command
 
         if ($email && $name && $password && $role) {
 
-             DB::table('users')->insert([
-                 'name' => $name,
-                 'email' => $email,
-                 'password' => bcrypt($password),
-                 'role_id' => config('permission.models.role')::where('name', $role)->first()->id,
-             ]);
+            DB::table('users')->insert([
+                'name' => $name,
+                'email' => $email,
+                'password' => bcrypt($password),
+                'role_id' => config('permission.models.role')::where('name', $role)->first()->id,
+            ]);
 
             $this->components->info('User is created');
         } else {
@@ -54,6 +54,4 @@ class MoonShineRolesPermissionsUserCommand extends Command
 
         return 0;
     }
-
-
 }

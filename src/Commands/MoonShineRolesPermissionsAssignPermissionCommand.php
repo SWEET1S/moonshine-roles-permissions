@@ -11,7 +11,7 @@ class MoonShineRolesPermissionsAssignPermissionCommand extends Command
      *
      * @var string
      */
-    protected $signature = 'moonshine-roles-perm:assign {permission : The name of the permission} {guard? : The name of the guard}';
+    protected $signature = 'moonshine-rbac:assign {permission : The name of the permission} {guard? : The name of the guard}';
 
     /**
      * The console command description.
@@ -61,6 +61,4 @@ class MoonShineRolesPermissionsAssignPermissionCommand extends Command
 
         return 0;
     }
-
-
 }
