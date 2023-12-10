@@ -154,16 +154,6 @@ php artisan moonshine-rbac:install
 php artisan moonshine-rbac:user
 ```
 
-9. Add new MoonShine resource to your MoonShineServiceProvider file, like this:
-
-```PHP
-    MenuGroup::make('System', [
-        MenuItem::make('Admins', new \Sweet1s\MoonshineRBAC\Resource\UserResource(), 'heroicons.outline.users'),
-        MenuItem::make('Roles', new \Sweet1s\MoonshineRBAC\Resource\RoleResource(), 'heroicons.outline.shield-exclamation'),
-    ], 'heroicons.outline.user-group'),
-...
-```
-
 ---
 
 ## Usage
