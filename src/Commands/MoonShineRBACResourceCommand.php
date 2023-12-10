@@ -27,11 +27,22 @@ class MoonShineRBACResourceCommand extends Command
      */
     public function handle(): int
     {
-        $this->call('moonshine:resource', [
-            'name' => $this->argument('name'),
-            '--model' => $this->option('model'),
-            '--title' => $this->option('title')
-        ]);
+
+        $arguments = [];
+
+        if ($this->argument('name')) {
+            $arguments['name'] = $this->argument('name');
+        }
+
+        if ($this->option('model')) {
+            $arguments['--model'] = $this->option('model');
+        }
+
+        if ($this->option('title')) {
+            $arguments['--title'] = $this->option('title');
+        }
+
+        $this->call('moonshine:resource', $arguments);
 
         $name = $this->argument('name');
 
