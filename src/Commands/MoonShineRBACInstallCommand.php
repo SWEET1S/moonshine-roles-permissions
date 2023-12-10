@@ -1,10 +1,10 @@
 <?php
 
-namespace Sweet1s\MoonshineRolesPermissions\Commands;
+namespace MoonshineRBAC\Commands;
 
 use Illuminate\Console\Command;
 
-class MoonShineRolesPermissionsInstallCommand extends Command
+class MoonShineRBACInstallCommand extends Command
 {
     /**
      * The name and signature of the console command.
@@ -32,11 +32,11 @@ class MoonShineRolesPermissionsInstallCommand extends Command
 
         $this->migration();
 
-        $this->call('moonshine-roles-perm:permissions', [
+        $this->call('moonshine-rbac:permissions', [
             'resourceName' => 'UserResource'
         ]);
 
-        $this->call('moonshine-roles-perm:permissions', [
+        $this->call('moonshine-rbac:permissions', [
             'resourceName' => 'RoleResource'
         ]);
 
@@ -63,7 +63,7 @@ class MoonShineRolesPermissionsInstallCommand extends Command
     public function createRole(): void
     {
         if (config('permission.models.role')::first() == null) {
-            $this->call('moonshine-roles-perm:role', [
+            $this->call('moonshine-rbac:role', [
                 'name' => 'Super Admin'
             ]);
 

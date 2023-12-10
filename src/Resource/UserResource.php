@@ -1,6 +1,6 @@
 <?php
 
-namespace Sweet1s\MoonshineRolesPermissions\Resource;
+namespace MoonshineRBAC\Resource;
 
 use App\Models\User as User;
 use Illuminate\Validation\Rule;

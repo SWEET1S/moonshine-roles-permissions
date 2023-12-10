@@ -14,13 +14,14 @@ permissions on a role-based level rather than individually assigning them to eac
 ## Features
 
 -   [x] Role-Based Access Control (RBAC): Enhance your MoonShine Admin Panel with a comprehensive role-based permission
-        system, allowing you to group users with similar permissions into roles and manage access more efficiently.
--   [x] Role Assignment: Seamlessly associate permissions with roles, making it effortless to define the access rights for
-        specific groups of users.
+    system, allowing you to group users with similar permissions into roles and manage access more efficiently.
+-   [x] Role Assignment: Seamlessly associate permissions with roles, making it effortless to define the access rights
+    for
+    specific groups of users.
 -   [x] Bulk Role Assignment: Grant multiple users the same role simultaneously, reducing the manual effort required to
-        manage permissions across large user bases.
+    manage permissions across large user bases.
 -   [x] Seamless Integration: The package seamlessly integrates with the MoonShine Admin Panel and extends the
-        capabilities of the Spatie Laravel Permissions package specifically for this panel.
+    capabilities of the Spatie Laravel Permissions package specifically for this panel.
 
 ---
 
@@ -144,8 +145,8 @@ php artisan moonshine-rbac:user
 
 ```PHP
 MenuGroup::make('System', [
-        MenuItem::make('Admins', new \Sweet1s\MoonshineRolesPermissions\Resource\UserResource(), 'heroicons.outline.users'),
-        MenuItem::make('Roles', new \Sweet1s\MoonshineRolesPermissions\Resource\RoleResource(), 'heroicons.outline.shield-exclamation'),
+        MenuItem::make('Admins', new \MoonshineRBAC\Resource\UserResource(), 'heroicons.outline.users'),
+        MenuItem::make('Roles', new \MoonshineRBAC\Resource\RoleResource(), 'heroicons.outline.shield-exclamation'),
     ], 'heroicons.outline.user-group'),
 ...
 ```
@@ -171,17 +172,6 @@ php artisan moonshine-rbac:resource Post
 ```PHP
 public static bool $withPolicy = true;
 ```
-
----
-
-## Custom Permissions
-
-You can simply create them in the database or by using the command
-**php artisan moonshine-rbac:permissions {resourceName}**.
-You can replace resourceName with any word you prefer.
-For example, if resourceName is set to "Database", then 8 permissions
-(view, viewAny, create, update, delete, restore, forceDelete, massDelete)
-with the names resourceName.permission will be created.
 
 ---
 

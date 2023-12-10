@@ -1,6 +1,6 @@
 <?php
 
-namespace Sweet1s\MoonshineRolesPermissions;
+namespace MoonshineRBAC;
 
 class Abilities
 {

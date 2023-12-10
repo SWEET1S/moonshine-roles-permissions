@@ -1,6 +1,6 @@
 <?php
 
-namespace Sweet1s\MoonshineRolesPermissions\FormComponents;
+namespace MoonshineRBAC\FormComponents;
 
 use Illuminate\Database\Eloquent\Model;
 use MoonShine\Components\FormBuilder;
@@ -15,7 +15,7 @@ use MoonShine\Traits\WithLabel;
 
 final class RolePermissionsFormComponent extends MoonShineComponent
 {
-    protected string $view = 'moonshine-roles-permissions::form-components.permissions';
+    protected string $view = 'moonshine-rbac::form-components.permissions';
     protected Model $item;
 
     use HasResource;
@@ -92,7 +92,7 @@ final class RolePermissionsFormComponent extends MoonShineComponent
             ])->columnSpan(6);
         }
 
-        return FormBuilder::make(route('moonshine-roles-permissions.roles.attach-permissions-to-role', $this->getItem()->getKey()))
+        return FormBuilder::make(route('moonshine-rbac.attach-permissions-to-role', $this->getItem()->getKey()))
             ->fields([
                 Switcher::make('All')->customAttributes([
                     '@change' => <<<'JS'

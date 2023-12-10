@@ -1,10 +1,10 @@
 <?php
 
-namespace Sweet1s\MoonshineRolesPermissions\Commands;
+namespace MoonshineRBAC\Commands;
 
 use Illuminate\Console\Command;
 
-class MoonShineRolesPermissionsAssignPermissionCommand extends Command
+class MoonShineRBACAssignPermissionCommand extends Command
 {
     /**
      * The name and signature of the console command.

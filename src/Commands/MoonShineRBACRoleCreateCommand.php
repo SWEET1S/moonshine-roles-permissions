@@ -1,8 +1,8 @@
 <?php
 
-namespace Sweet1s\MoonshineRolesPermissions\Commands;
+namespace MoonshineRBAC\Commands;
 
-class MoonShineRolesPermissionsRoleCreateCommand extends MoonShineRolesPermissionsCommand
+class MoonShineRBACRoleCreateCommand extends MoonShineRBACCommand
 {
     /**
      * The name and signature of the console command.

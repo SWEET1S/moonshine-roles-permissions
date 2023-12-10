@@ -1,13 +1,13 @@
 <?php
 
-namespace Sweet1s\MoonshineRolesPermissions\Http\Controllers;
+namespace MoonshineRBAC\Http\Controllers;
 
 use Illuminate\Http\Request;
 use MoonShine\Http\Controllers\MoonShineController;
 use MoonShine\MoonShineUI;
 use Spatie\Permission\Models\Role;
 
-class MoonShineRolesPermissionsController extends MoonShineController
+class MoonShineRBACController extends MoonShineController
 {
     public function attachPermissionsToRole(Request $request, Role $role)
     {

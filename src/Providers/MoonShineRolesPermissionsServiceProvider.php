@@ -1,28 +1,27 @@
 <?php
 
-namespace Sweet1s\MoonshineRolesPermissions\Providers;
+namespace MoonshineRBAC\Providers;
 
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\ServiceProvider;
-use Sweet1s\MoonshineRolesPermissions\Abilities;
-use Sweet1s\MoonshineRolesPermissions\Commands\MoonShineRolesPermissionsAssignPermissionCommand;
-use Sweet1s\MoonshineRolesPermissions\Commands\MoonShineRolesPermissionsCreatePermissionsResourceCommand;
-use Sweet1s\MoonshineRolesPermissions\Commands\MoonShineRolesPermissionsInstallCommand;
-use Sweet1s\MoonshineRolesPermissions\Commands\MoonShineRolesPermissionsResourceCommand;
-use Sweet1s\MoonshineRolesPermissions\Commands\MoonShineRolesPermissionsRoleCreateCommand;
-use Sweet1s\MoonshineRolesPermissions\Commands\MoonShineRolesPermissionsUserCommand;
+use MoonshineRBAC\Abilities;
+use MoonshineRBAC\Commands\MoonShineRBACAssignPermissionCommand;
+use MoonshineRBAC\Commands\MoonShineRBACCreatePermissionsResourceCommand;
+use MoonshineRBAC\Commands\MoonShineRBACInstallCommand;
+use MoonshineRBAC\Commands\MoonShineRBACResourceCommand;
+use MoonshineRBAC\Commands\MoonShineRBACRoleCreateCommand;
+use MoonshineRBAC\Commands\MoonShineRBACUserCommand;
 
 final class MoonShineRolesPermissionsServiceProvider extends ServiceProvider
 {
 
     protected array $commands = [
-        MoonShineRolesPermissionsAssignPermissionCommand::class,
-        MoonShineRolesPermissionsInstallCommand::class,
-        MoonShineRolesPermissionsRoleCreateCommand::class,
-        MoonShineRolesPermissionsUserCommand::class,
-        MoonShineRolesPermissionsAssignPermissionCommand::class,
-        MoonShineRolesPermissionsResourceCommand::class,
-        MoonShineRolesPermissionsCreatePermissionsResourceCommand::class
+        MoonShineRBACAssignPermissionCommand::class,
+        MoonShineRBACInstallCommand::class,
+        MoonShineRBACRoleCreateCommand::class,
+        MoonShineRBACUserCommand::class,
+        MoonShineRBACResourceCommand::class,
+        MoonShineRBACCreatePermissionsResourceCommand::class
     ];
 
     public function register(): void
@@ -32,11 +31,11 @@ final class MoonShineRolesPermissionsServiceProvider extends ServiceProvider
 
     public function boot(): void
     {
-        $this->loadRoutesFrom(__DIR__ . '/../../routes/moonshine-roles-permissions.php');
+        $this->loadRoutesFrom(__DIR__ . '/../../routes/moonshine-rbac.php');
 
         $this->loadMigrationsFrom(__DIR__ . '/../../database/migrations');
 
-        $this->loadViewsFrom(__DIR__ . '/../../resources/views', 'moonshine-roles-permissions');
+        $this->loadViewsFrom(__DIR__ . '/../../resources/views', 'moonshine-rbac');
 
         if ($this->app->runningInConsole()) {
             $this->commands($this->commands);
