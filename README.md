@@ -145,8 +145,8 @@ php artisan moonshine-rbac:user
 
 ```PHP
 MenuGroup::make('System', [
-        MenuItem::make('Admins', new \MoonshineRBAC\Resource\UserResource(), 'heroicons.outline.users'),
-        MenuItem::make('Roles', new \MoonshineRBAC\Resource\RoleResource(), 'heroicons.outline.shield-exclamation'),
+        MenuItem::make('Admins', new \Sweet1s\MoonshineRBAC\Resource\UserResource(), 'heroicons.outline.users'),
+        MenuItem::make('Roles', new \Sweet1s\MoonshineRBAC\Resource\RoleResource(), 'heroicons.outline.shield-exclamation'),
     ], 'heroicons.outline.user-group'),
 ...
 ```
