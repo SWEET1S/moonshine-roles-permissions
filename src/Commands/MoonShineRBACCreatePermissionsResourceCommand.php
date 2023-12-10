@@ -1,9 +1,9 @@
 <?php
 
-namespace MoonshineRBAC\Commands;
+namespace Sweet1s\MoonshineRBAC\Commands;
 
 use Illuminate\Console\Command;
-use MoonshineRBAC\Abilities;
+use Sweet1s\MoonshineRBAC\Abilities;
 
 class MoonShineRBACCreatePermissionsResourceCommand extends Command
 {

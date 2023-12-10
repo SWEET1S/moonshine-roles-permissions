@@ -1,16 +1,16 @@
 <?php
 
-namespace MoonshineRBAC\Providers;
+namespace Sweet1s\MoonshineRBAC\Providers;
 
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\ServiceProvider;
-use MoonshineRBAC\Abilities;
-use MoonshineRBAC\Commands\MoonShineRBACAssignPermissionCommand;
-use MoonshineRBAC\Commands\MoonShineRBACCreatePermissionsResourceCommand;
-use MoonshineRBAC\Commands\MoonShineRBACInstallCommand;
-use MoonshineRBAC\Commands\MoonShineRBACResourceCommand;
-use MoonshineRBAC\Commands\MoonShineRBACRoleCreateCommand;
-use MoonshineRBAC\Commands\MoonShineRBACUserCommand;
+use Sweet1s\MoonshineRBAC\Abilities;
+use Sweet1s\MoonshineRBAC\Commands\MoonShineRBACAssignPermissionCommand;
+use Sweet1s\MoonshineRBAC\Commands\MoonShineRBACCreatePermissionsResourceCommand;
+use Sweet1s\MoonshineRBAC\Commands\MoonShineRBACInstallCommand;
+use Sweet1s\MoonshineRBAC\Commands\MoonShineRBACResourceCommand;
+use Sweet1s\MoonshineRBAC\Commands\MoonShineRBACRoleCreateCommand;
+use Sweet1s\MoonshineRBAC\Commands\MoonShineRBACUserCommand;
 
 final class MoonShineRolesPermissionsServiceProvider extends ServiceProvider
 {

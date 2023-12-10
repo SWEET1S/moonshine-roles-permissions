@@ -32,7 +32,7 @@
     },
     "autoload": {
         "psr-4": {
-            "MoonshineRBAC\\": "src/"
+            "Sweet1s\\MoonshineRBAC\\": "src/"
         }
     },
     "scripts": {
@@ -42,7 +42,7 @@
     "extra": {
         "laravel": {
             "providers": [
-                "MoonshineRBAC\\Providers\\MoonShineRolesPermissionsServiceProvider"
+                "Sweet1s\\MoonshineRBAC\\Providers\\MoonShineRolesPermissionsServiceProvider"
             ]
         }
     }

@@ -1,6 +1,6 @@
 <?php
 
-namespace MoonshineRBAC\Commands;
+namespace Sweet1s\MoonshineRBAC\Commands;
 
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\DB;

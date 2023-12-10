@@ -1,6 +1,6 @@
 <?php
 
-namespace MoonshineRBAC\FormComponents;
+namespace Sweet1s\MoonshineRBAC\FormComponents;
 
 use Illuminate\Database\Eloquent\Model;
 use MoonShine\Components\FormBuilder;

@@ -1,6 +1,6 @@
 <?php
 
-namespace MoonshineRBAC\Commands;
+namespace Sweet1s\MoonshineRBAC\Commands;
 use Leeto\PackageCommand\Command;
 
 class MoonShineRBACCommand extends Command

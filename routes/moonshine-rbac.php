@@ -1,7 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use MoonshineRBAC\Http\Controllers\MoonShineRBACController;
+use Sweet1s\MoonshineRBAC\Http\Controllers\MoonShineRBACController;
 
 $middlewares = collect(config('moonshine.route.middleware'))
     ->reject(static fn ($middleware): bool => $middleware === 'web')

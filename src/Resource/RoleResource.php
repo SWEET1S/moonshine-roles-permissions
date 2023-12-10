@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace MoonshineRBAC\Resource;
+namespace Sweet1s\MoonshineRBAC\Resource;
 
 use App\Models\Role;
 use MoonShine\Decorations\Block;
@@ -11,7 +11,7 @@ use MoonShine\Enums\PageType;
 use MoonShine\Fields\ID;
 use MoonShine\Fields\Text;
 use MoonShine\Resources\ModelResource;
-use MoonshineRBAC\FormComponents\RolePermissionsFormComponent;
+use Sweet1s\MoonshineRBAC\FormComponents\RolePermissionsFormComponent;
 
 class RoleResource extends ModelResource
 {

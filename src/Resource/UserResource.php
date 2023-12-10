@@ -1,6 +1,6 @@
 <?php
 
-namespace MoonshineRBAC\Resource;
+namespace Sweet1s\MoonshineRBAC\Resource;
 
 use App\Models\User as User;
 use Illuminate\Validation\Rule;

@@ -1,6 +1,6 @@
 <?php
 
-namespace MoonshineRBAC\Commands;
+namespace Sweet1s\MoonshineRBAC\Commands;
 
 class MoonShineRBACRoleCreateCommand extends MoonShineRBACCommand
 {

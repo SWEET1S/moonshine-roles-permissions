@@ -1,6 +1,6 @@
 <?php
 
-namespace MoonshineRBAC\Http\Controllers;
+namespace Sweet1s\MoonshineRBAC\Http\Controllers;
 
 use Illuminate\Http\Request;
 use MoonShine\Http\Controllers\MoonShineController;
