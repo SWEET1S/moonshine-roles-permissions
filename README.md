@@ -11,7 +11,7 @@ permissions on a role-based level rather than individually assigning them to eac
 
 ---
 
->### Requirements
+> ### Requirements
 > Moonshine: v2.0+
 >
 > Spatie Laravel Permissions
@@ -34,19 +34,14 @@ permissions on a role-based level rather than individually assigning them to eac
 
 ## Important
 
-Before using the package, it is crucial to understand that you need to use a different user model instead of "
-MoonShineUser". Also, you can extend the MoonshineUser model and use the **moonshine_users table**, but you must add the
-column **role_id** and specify in your new User model `protected $table = "moonshine_users"`. The package requires
-the utilization of the Spatie Laravel Permission package and an empty **"moonshine_user_permissions"** table. Please
-note that when the "moonshine_user_permissions" table contains other permissions for users, MoonShine Admin Panel
-utilizes its internal Policy implementation, disregarding any existing Policy defined in "App/Policy."
+Before using the package, it is crucial to understand that you need to use a different user model instead of "`MoonShineUser`" and use the table `users`. The package requires the utilization of the Spatie Laravel.
 
 ---
 
 ## Installation
 
 1. Install the [Spatie Laravel Permissions](https://github.com/spatie/laravel-permission) package and follow the
-   instructions in the [documentation](https://spatie.be/docs/laravel-permission/v5/installation-laravel) to set up the
+   instructions in the [documentation](https://spatie.be/docs/laravel-permission/v6/installation-laravel) to set up the
    package correctly.
 
 2. Install the package via composer:
@@ -152,6 +147,17 @@ php artisan moonshine-rbac:install
 
 ```bash
 php artisan moonshine-rbac:user
+```
+
+9. Add new MoonShine resource to your MoonShineServiceProvider file, like this (you can use other UserResource):
+
+```PHP
+
+MenuGroup::make('System', [
+    MenuItem::make('Admins', new \Sweet1s\MoonshineRolesPermissions\Resource\UserResource(), 'heroicons.outline.users'),
+    MenuItem::make('Roles', new \Sweet1s\MoonshineRolesPermissions\Resource\RoleResource(), 'heroicons.outline.shield-exclamation'),
+], 'heroicons.outline.user-group'),
+
 ```
 
 ---
