@@ -69,7 +69,7 @@ return [
 ];
 ```
 
-4. In the permission config file, change the models.role to App\Models\Role::class (Model need extend
+4. In the `Spatie permission config file`, change the models.role to `App\Models\Role::class` (Model need extend
    \Spatie\Permission\Models\Role), like this:
 
 ```PHP
@@ -84,17 +84,17 @@ return [
 
 ```PHP
 
-<?php
+    <?php
 
-namespace App\Models;
+    namespace App\Models;
 
-use Spatie\Permission\Models\Role as SpatieRole;
-use Sweet1s\MoonshineRBAC\Traits\HasMoonShineRolePermissions;
+    use Spatie\Permission\Models\Role as SpatieRole;
+    use Sweet1s\MoonshineRBAC\Traits\HasMoonShineRolePermissions;
 
-class Role extends SpatieRole
-{
-    use HasMoonShineRolePermissions;
-}
+    class Role extends SpatieRole
+    {
+        use HasMoonShineRolePermissions;
+    }
 
 
 ```
@@ -136,7 +136,6 @@ class User extends Authenticatable
     // ...
 }
 ```
-
 7. Run the following command to install the package and follow the installation steps:
 
 ```bash
@@ -148,7 +147,6 @@ php artisan moonshine-rbac:install
 ```bash
 php artisan moonshine-rbac:user
 ```
-
 9. Add new MoonShine resource to your MoonShineServiceProvider file, like this (you can use other UserResource):
 
 ```PHP
