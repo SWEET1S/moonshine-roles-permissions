@@ -33,7 +33,6 @@ class MoonShineRBACCreatePermissionsResourceCommand extends Command
      */
     public function handle(): int
     {
-
         $this->resourceName = $this->argument('resourceName');
 
         foreach (Abilities::getAbilities() as $ability) {

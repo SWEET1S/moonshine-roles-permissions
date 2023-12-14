@@ -10,23 +10,20 @@ trait HasMoonShineRolePermissions
     {
         $permission = $resourceClass . '.' . $ability;
 
-        $hasPermission = false;
+        if (config('moonshine.auth.providers.moonshine.model')::SUPER_ADMIN_ROLE_ID == $this->id) {
+            return true;
+        }
 
         try {
 
-            $hasPermission = $this->hasPermissionTo($permission);
+            return $this->hasPermissionTo($permission);
 
         } catch (PermissionDoesNotExist $e) {
 
             $this->createPermissionIfNotExists($permission);
 
+            return false;
         }
-
-        if (config('moonshine.auth.providers.moonshine.model')::SUPER_ADMIN_ROLE_ID == $this->id) {
-            return true;
-        }
-
-        return $hasPermission;
     }
 
     private function createPermissionIfNotExists(string $permission): void
