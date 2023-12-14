@@ -4,6 +4,7 @@ namespace Sweet1s\MoonshineRBAC\Traits;
 
 use MoonShine\Enums\Layer;
 use MoonShine\Enums\PageType;
+use Sweet1s\MoonshineRBAC\FormComponents\RolePermissionsFormComponent;
 
 trait WithPermissionsFormComponent
 {
@@ -13,7 +14,7 @@ trait WithPermissionsFormComponent
             ->findByUri(PageType::FORM->value)
             ->pushToLayer(
                 layer: Layer::BOTTOM,
-                component: Permissions::make(
+                component: RolePermissionsFormComponent::make(
                     label: 'Permissions',
                     resource: $this,
                 )
