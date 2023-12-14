@@ -2,11 +2,13 @@
 
 namespace Sweet1s\MoonshineRBAC;
 
+use Illuminate\Support\Collection;
+
 class Abilities
 {
-    public static function getAbilities(): array
+    public static function getAbilities(): Collection
     {
-        return [
+        return collect([
             'viewAny',
             'view',
             'create',
@@ -15,6 +17,6 @@ class Abilities
             'massDelete',
             'restore',
             'forceDelete',
-        ];
+        ]);
     }
 }
