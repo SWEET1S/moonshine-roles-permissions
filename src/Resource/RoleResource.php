@@ -6,17 +6,16 @@ namespace Sweet1s\MoonshineRBAC\Resource;
 
 use App\Models\Role;
 use MoonShine\Decorations\Block;
-use MoonShine\Enums\Layer;
-use MoonShine\Enums\PageType;
 use MoonShine\Fields\ID;
 use MoonShine\Fields\Text;
 use MoonShine\Resources\ModelResource;
-use Sweet1s\MoonshineRBAC\FormComponents\RolePermissionsFormComponent;
+use Sweet1s\MoonshineRBAC\Traits\WithPermissionsFormComponent;
 use Sweet1s\MoonshineRBAC\Traits\WithRolePermissions;
 
 class RoleResource extends ModelResource
 {
     use WithRolePermissions;
+    use WithPermissionsFormComponent;
 
     public string $model = Role::class;
 
@@ -55,20 +54,5 @@ class RoleResource extends ModelResource
         return [
             Text::make(trans('moonshine::ui.resource.role_name'), 'name'),
         ];
-    }
-
-    protected function onBoot(): void
-    {
-        parent::onBoot();
-
-        $this->getPages()
-            ->findByUri(PageType::FORM->value)
-            ->pushToLayer(
-                layer: Layer::BOTTOM,
-                component: RolePermissionsFormComponent::make(
-                    'Permissions',
-                    $this,
-                )
-            );
     }
 }

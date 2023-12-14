@@ -20,12 +20,6 @@ return new class extends Migration {
                 });
             }
 
-            if (!Schema::hasColumn('users', 'role_id')) {
-                Schema::table('users', function (Blueprint $table) {
-                    $table->integer('role_id')->nullable();
-                });
-            }
-
         } else {
             Schema::create('users', function (Blueprint $table) {
                 $table->id();
@@ -50,12 +44,6 @@ return new class extends Migration {
     public function down(): void
     {
         if (Schema::hasTable('users')) {
-
-            if(Schema::hasColumn('users', 'role_id')) {
-                Schema::table('users', function (Blueprint $table) {
-                    $table->dropColumn('role_id');
-                });
-            }
 
             if(Schema::hasColumn('users', 'avatar')) {
                 Schema::table('users', function (Blueprint $table) {
