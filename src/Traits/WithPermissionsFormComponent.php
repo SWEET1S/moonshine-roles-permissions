@@ -15,7 +15,7 @@ trait WithPermissionsFormComponent
             ->pushToLayer(
                 layer: Layer::BOTTOM,
                 component: RolePermissionsFormComponent::make(
-                    label: 'Permissions',
+                    label: trans('moonshine-rbac::ui.permissions'),
                     resource: $this,
                 )
             );

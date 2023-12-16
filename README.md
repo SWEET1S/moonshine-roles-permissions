@@ -34,7 +34,8 @@ permissions on a role-based level rather than individually assigning them to eac
 
 ## Important
 
-Before using the package, it is crucial to understand that you need to use a different user model instead of "`MoonShineUser`" and use the table `users`. The package requires the utilization of the Spatie Laravel.
+Before using the package, it is crucial to understand that you need to use a different user model instead
+of "`MoonShineUser`" and use the table `users`. The package requires the utilization of the Spatie Laravel.
 
 ---
 
@@ -76,27 +77,25 @@ return [
 'models' => [
     // ...
     'role' => App\Models\Role::class,
-
 ],
 ```
 
-5. For your role model, add the following:
+5. For your Role model, add the following:
 
 ```PHP
+<?php
 
-    <?php
+namespace App\Models;
 
-    namespace App\Models;
+use Sweet1s\MoonshineRBAC\Traits\HasMoonShineRolePermissions;
+use Spatie\Permission\Models\Role as SpatieRole;
 
-    use Spatie\Permission\Models\Role as SpatieRole;
-    use Sweet1s\MoonshineRBAC\Traits\HasMoonShineRolePermissions;
+class Role extends SpatieRole
+{
+    use HasMoonShineRolePermissions;
 
-    class Role extends SpatieRole
-    {
-        use HasMoonShineRolePermissions;
-    }
-
-
+    protected $with = ['permissions'];
+}
 ```
 
 6. For the user model, add the following:
@@ -109,33 +108,18 @@ namespace App\Models;
 // ...
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
-use App\Models\Role;
 use Spatie\Permission\Traits\HasRoles;
 
 class User extends Authenticatable
 {
-    // ...
-
-    const SUPER_ADMIN_ROLE_ID = 1;
-
     use HasRoles;
 
-    protected $fillable = [
-        'name',
-        'avatar',
-        'email',
-        'role_id',
-        'password'
-    ];
-
-    public function role(): BelongsTo
-    {
-        return $this->belongsTo(Role::class);
-    }
+    const SUPER_ADMIN_ROLE_ID = 1;
 
     // ...
 }
 ```
+
 7. Run the following command to install the package and follow the installation steps:
 
 ```bash
@@ -147,7 +131,48 @@ php artisan moonshine-rbac:install
 ```bash
 php artisan moonshine-rbac:user
 ```
-9. Add new MoonShine resource to your MoonShineServiceProvider file, like this (you can use other UserResource):
+
+9. Add to your `RoleResource` trait `WithPermissionsFormComponent`:
+
+```PHP
+<?php
+
+namespace App\MoonShine\Resources;
+
+use Sweet1s\MoonshineRBAC\Traits\WithPermissionsFormComponent;
+use Sweet1s\MoonshineRBAC\Traits\WithRolePermissions;
+
+class RoleResource extends ModelResource
+{
+    use WithRolePermissions;
+    use WithPermissionsFormComponent;
+
+    // ...
+}
+```
+
+Add to your `UserResource` trait `WithRoleFormComponent`:
+
+```PHP
+<?php
+
+namespace App\MoonShine\Resources;
+
+use Sweet1s\MoonshineRBAC\Traits\WithRoleFormComponent;
+use Sweet1s\MoonshineRBAC\Traits\WithRolePermissions;
+
+class UserResource extends ModelResource
+{
+    use WithRolePermissions;
+    use WithRoleFormComponent;
+
+    // ...
+}
+```
+
+---
+
+Or add new MoonShine resource to your MoonShineServiceProvider file, like this (you can use other UserResource):
 
 ```PHP
 
@@ -162,13 +187,17 @@ MenuGroup::make('System', [
 
 ## Usage
 
-1. [Creating a section in the admin panel with MoonShine](https://moonshine.cutcode.dev/section/resources-index?change-moonshine-locale=en)
+1. [Creating a section in the admin panel with MoonShine](https://moonshine-laravel.com/docs/section/resources-index)
 
 ```bash
 php artisan moonshine:resource Post
 ```
 
-_You can use the following command to generate a resource and policy at the same time:_
+```bash
+php artisan moonshine-rbac:permissions PostResource
+```
+
+_You can use the following command to generate a resource and permissions at the same time:_
 
 ```bash
 php artisan moonshine-rbac:resource Post
@@ -180,12 +209,24 @@ php artisan moonshine-rbac:resource Post
 // ...
 use Sweet1s\MoonshineRBAC\Traits\WithRolePermissions;
 
-class ArticleResource extends ModelResource
+class PostResource extends ModelResource
 {
     use WithRolePermissions;
 
     // ...
 }
+```
+
+---
+
+## Localization
+
+The package comes with default translation files in English, Russian and Romanian. If you want to customise the
+translations, you can publish
+the package translation files in your project using the following command:
+
+```bash
+php artisan vendor:publish --tag=moonshine-rbac-lang
 ```
 
 ---
@@ -196,4 +237,6 @@ class ArticleResource extends ModelResource
 
 #### _How does it look in the Admin Panel ?_
 
-![How does it look in the Admin Panel](./.docs/images/how-look-role.jpg)
+|                                     Role Resource                                     |                                     User Resource                                      |
+|:-------------------------------------------------------------------------------------:|:--------------------------------------------------------------------------------------:|
+| ![How does RoleResource it look in the Admin Panel](./.docs/images/how-look-role.jpg) | ![How does UserResource it look in the Admin Panel](./.docs/images/how-look-users.jpg) |

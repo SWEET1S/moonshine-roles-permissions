@@ -51,13 +51,13 @@ class MoonShineRBACInstallCommand extends Command
 
     public function migration(): void
     {
-        $response = $this->choice('Do you want create or supplement users table ?', ['yes', 'no'], 0);
+        $this->call('migrate', [
+            '--path' => 'vendor/sweet1s/moonshine-roles-permissions/database/migrations/create_or_supplement_users_table.php'
+        ]);
 
-        if ($response == 'yes') {
-            $this->call('migrate', [
-                '--path' => 'vendor/sweet1s/moonshine-roles-permissions/database/migrations/create_or_supplement_users_table.php'
-            ]);
-        }
+        $this->call('migrate', [
+            '--path' => 'vendor/sweet1s/moonshine-roles-permissions/database/migrations/add_role_priority_to_roles_table.php'
+        ]);
     }
 
     public function createRole(): void

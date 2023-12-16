@@ -39,27 +39,43 @@ final class MoonShineRBACServiceProvider extends ServiceProvider
 
         $this->loadViewsFrom(__DIR__ . '/../../resources/views', 'moonshine-rbac');
 
+        $this->loadTranslationsFrom(__DIR__ . '/../../lang', 'moonshine-rbac');
+
         if ($this->app->runningInConsole()) {
             $this->commands($this->commands);
         }
 
+        $this->publishes([
+            __DIR__ . '/../../lang' => resource_path('lang/vendor/moonshine-rbac'),
+        ], 'moonshine-rbac-lang');
+
         MoonShine::defineAuthorization(
             static function (ResourceContract $resource, Model $user, string $ability): bool {
 
-                $hasRolePermissions = in_array(
+                $hasRolePermissionsTrait = in_array(
                     WithRolePermissions::class,
                     class_uses_recursive($resource),
                     true
                 );
 
-                if (!$hasRolePermissions) {
+                if (!$hasRolePermissionsTrait) {
                     return true;
                 }
 
-                return $user?->role->isHavePermission(
-                    class_basename($resource::class),
-                    $ability
-                );
+                $hasPermission = false;
+
+                foreach ($user->roles as $role) {
+                    $hasPermission = $role->isHavePermission(
+                        class_basename($resource::class),
+                        $ability
+                    );
+
+                    if ($hasPermission) {
+                        break;
+                    }
+                }
+
+                return $hasPermission;
             }
         );
     }

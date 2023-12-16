@@ -17,15 +17,16 @@ use MoonShine\Fields\Relationships\BelongsTo;
 use MoonShine\Fields\Text;
 use MoonShine\FormComponents\ChangeLogFormComponent;
 use MoonShine\Resources\ModelResource;
+use Sweet1s\MoonshineRBAC\Traits\WithRoleFormComponent;
 use Sweet1s\MoonshineRBAC\Traits\WithRolePermissions;
 
 class UserResource extends ModelResource
 {
     use WithRolePermissions;
+    use WithRoleFormComponent;
 
     public string $model = User::class;
     public string $titleField = 'name';
-    protected array $with = ['role'];
 
     public function title(): string
     {
@@ -43,14 +44,6 @@ class UserResource extends ModelResource
                             ID::make()
                                 ->sortable()
                                 ->useOnImport()
-                                ->showOnExport(),
-
-                            BelongsTo::make(
-                                trans('moonshine::ui.resource.role'),
-                                'role',
-                                'name'
-                            )
-                                ->nullable()
                                 ->showOnExport(),
 
                             Text::make(
@@ -123,18 +116,6 @@ class UserResource extends ModelResource
                     ),
                 ]),
             ]),
-        ];
-    }
-
-    public function components(): array
-    {
-        return [
-            ChangeLogFormComponent::make('Change log')
-                ->canSee(
-                    fn (
-                        $user
-                    ): bool => auth()?->user()->role->hasPermissionTo('RoleResource.update')
-                ),
         ];
     }
 

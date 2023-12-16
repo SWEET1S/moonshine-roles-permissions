@@ -8,6 +8,7 @@ use MoonShine\Components\MoonShineComponent;
 use MoonShine\Decorations\Column;
 use MoonShine\Decorations\Divider;
 use MoonShine\Decorations\Grid;
+use MoonShine\Fields\Select;
 use MoonShine\Fields\Switcher;
 use MoonShine\MoonShineAuth;
 use MoonShine\Resources\ModelResource;
@@ -56,7 +57,16 @@ final class RolePermissionsFormComponent extends MoonShineComponent
 
             foreach ($resource->gateAbilities() as $ability) {
 
-                if (!$currentUser->role->isHavePermission($class, $ability)) {
+                $hasPermission = false;
+
+                foreach ($currentUser->roles as $role) {
+                    if ($role->isHavePermission($class, $ability)) {
+                        $hasPermission = true;
+                        break;
+                    }
+                }
+
+                if (!$hasPermission) {
                     continue;
                 }
 
@@ -71,11 +81,15 @@ final class RolePermissionsFormComponent extends MoonShineComponent
                 }
 
                 $checkboxes[] = Switcher::make(
-                    $ability,
+                    trans("moonshine-rbac::ui.$ability"),
                     "permissions." . $class . ".$ability"
                 )
                     ->customAttributes(['class' => 'permission_switcher ' . $class])
                     ->setName("permissions[" . $class . "][$ability]");
+            }
+
+            if (empty($checkboxes)) {
+                continue;
             }
 
             $elements[] = Column::make([
@@ -93,7 +107,9 @@ final class RolePermissionsFormComponent extends MoonShineComponent
 
         return FormBuilder::make(route('moonshine-rbac.roles.attach-permissions-to-role', $this->getItem()->getKey()))
             ->fields([
-                Switcher::make('All')->customAttributes([
+                $this->priorityField(),
+                Divider::make(),
+                Switcher::make(trans('moonshine-rbac::ui.all'))->customAttributes([
                     '@change' => <<<'JS'
                         document
                           .querySelectorAll('.permission_switcher, .permission_switcher_section')
@@ -107,6 +123,21 @@ final class RolePermissionsFormComponent extends MoonShineComponent
             ])
             ->fill($values)
             ->submit(__('moonshine::ui.save'));
+    }
+
+    public function priorityField()
+    {
+        return Select::make(trans('moonshine-rbac::ui.can_give_the_roles'))
+            ->options(
+                config('permission.models.role')::where('id', '!=', config('moonshine.auth.providers.moonshine.model')::SUPER_ADMIN_ROLE_ID)
+                    ->get()
+                    ->pluck('name', 'id')
+                    ->toArray()
+            )
+            ->default($this->getItem()->role_priority)
+            ->searchable()
+            ->multiple()
+            ->setName('role_priority[]');
     }
 
     protected function viewData(): array

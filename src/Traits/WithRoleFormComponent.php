@@ -15,7 +15,7 @@ trait WithRoleFormComponent
             ->pushToLayer(
                 layer: Layer::BOTTOM,
                 component: RoleFormComponent::make(
-                    label: 'Role',
+                    label: trans('moonshine-rbac::ui.roles'),
                     resource: $this,
                 )
             );

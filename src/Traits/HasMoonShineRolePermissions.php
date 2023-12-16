@@ -6,6 +6,11 @@ use Spatie\Permission\Exceptions\PermissionDoesNotExist;
 
 trait HasMoonShineRolePermissions
 {
+    public function getRolePriorityAttribute($value)
+    {
+        return json_decode($value, true) ?? [];
+    }
+
     public function isHavePermission(string $resourceClass, string $ability): bool
     {
         $permission = $resourceClass . '.' . $ability;
