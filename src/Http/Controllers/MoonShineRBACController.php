@@ -3,6 +3,7 @@
 namespace Sweet1s\MoonshineRBAC\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 use MoonShine\Http\Controllers\MoonShineController;
 use MoonShine\MoonShineAuth;
 use MoonShine\MoonShineUI;
@@ -38,6 +39,9 @@ class MoonShineRBACController extends MoonShineController
                 trans('moonshine-rbac::ui.unauthorized'),
                 'error'
             );
+
+            Log::error('[MoonShineRBACController] attachPermissionsToRole: User has no role');
+
             return back();
         }
 
@@ -56,9 +60,11 @@ class MoonShineRBACController extends MoonShineController
         foreach ($permissions as $permission) {
             if (!($this->superAdminRoleId == $authUserRole->id) && !$authUserRole?->hasPermissionTo($permission)) {
                 MoonShineUI::toast(
-                    trans('moonshine::ui.unauthorized'),
+                    trans('moonshine-rbac::ui.unauthorized'),
                     'error'
                 );
+
+                Log::error('[MoonShineRBACController] attachPermissionsToRole: User has no permission to ' . $permission);
 
                 return back();
             }
@@ -98,6 +104,7 @@ class MoonShineRBACController extends MoonShineController
         $authenticatedUser = MoonShineAuth::guard()->user();
 
         if (!$this->hasPermissionsToSyncRoles($authenticatedUser, $user, $request)) {
+
             MoonShineUI::toast(
                 trans('moonshine-rbac::ui.unauthorized'),
                 'error'
