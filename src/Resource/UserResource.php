@@ -13,7 +13,6 @@ use MoonShine\Fields\ID;
 use MoonShine\Fields\Image;
 use MoonShine\Fields\Password;
 use MoonShine\Fields\PasswordRepeat;
-use MoonShine\Fields\Relationships\BelongsTo;
 use MoonShine\Fields\Text;
 use MoonShine\FormComponents\ChangeLogFormComponent;
 use MoonShine\Resources\ModelResource;

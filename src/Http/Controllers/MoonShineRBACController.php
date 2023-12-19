@@ -32,9 +32,9 @@ class MoonShineRBACController extends MoonShineController
             return back();
         }
 
-        $authUserRole = MoonShineAuth::guard()->user()?->roles;
+        $authUserRoles = MoonShineAuth::guard()->user()?->roles;
 
-        if ($authUserRole->isEmpty()) {
+        if ($authUserRoles->isEmpty()) {
 
             MoonShineUI::toast(
                 trans('moonshine-rbac::ui.unauthorized'),
@@ -46,20 +46,37 @@ class MoonShineRBACController extends MoonShineController
             return back();
         }
 
+        if (!(in_array($this->superAdminRoleId, $authUserRoles->pluck('id')->toArray()))) {
+            MoonShineUI::toast(
+                trans('moonshine-rbac::ui.unauthorized'),
+                'error'
+            );
+
+            Log::error('[MoonShineRBACController] attachPermissionsToRole: You cannot edit permissions of Super Admin role');
+
+            return back();
+        }
+
         $permissions = [];
 
         foreach ($request->get('permissions') as $resource => $abilities) {
 
             foreach ($abilities as $ability => $value) {
-
                 if ($value == '1') {
                     $permissions[] = $resource . '.' . $ability;
                 }
             }
+
         }
 
         foreach ($permissions as $permission) {
-            if (!($this->superAdminRoleId == $authUserRole->id) && !$authUserRole?->hasPermissionTo($permission)) {
+
+            foreach ($authUserRoles as $userRole) {
+
+                if ($userRole->isHavePermission(permission: $permission)) {
+                    continue;
+                }
+
                 MoonShineUI::toast(
                     trans('moonshine-rbac::ui.unauthorized'),
                     'error'
@@ -69,6 +86,7 @@ class MoonShineRBACController extends MoonShineController
 
                 return back();
             }
+
         }
 
         $role->syncPermissions($permissions);

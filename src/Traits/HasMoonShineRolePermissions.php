@@ -11,9 +11,20 @@ trait HasMoonShineRolePermissions
         return $value !== null ? json_decode($value, true) : [];
     }
 
-    public function isHavePermission(string $resourceClass, string $ability): bool
+    /**
+     * @param string|null $resourceClass
+     * @param string|null $ability
+     * @param string|null $permission
+     *
+     * @return bool
+     */
+    public function isHavePermission(string $resourceClass = null, string $ability = null, string $permission = null): bool
     {
-        $permission = $resourceClass . '.' . $ability;
+        $currentPermission = $resourceClass . '.' . $ability;
+
+        if ($permission != null) {
+            $currentPermission = $permission;
+        }
 
         if (config('moonshine.auth.providers.moonshine.model')::SUPER_ADMIN_ROLE_ID == $this->id) {
             return true;
@@ -21,11 +32,11 @@ trait HasMoonShineRolePermissions
 
         try {
 
-            return $this->hasPermissionTo($permission);
+            return $this->hasPermissionTo($currentPermission);
 
         } catch (PermissionDoesNotExist $e) {
 
-            $this->createPermissionIfNotExists($permission);
+            $this->createPermissionIfNotExists($currentPermission);
 
             return false;
         }
