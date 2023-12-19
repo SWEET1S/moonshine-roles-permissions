@@ -40,12 +40,13 @@ class MoonShineRBACUserCommand extends Command
 
         if ($email && $name && $password && $role) {
 
-            DB::table('users')->insert([
+            $user = config('moonshine.auth.providers.moonshine.model')::create([
                 'name' => $name,
                 'email' => $email,
                 'password' => bcrypt($password),
-                'role_id' => config('permission.models.role')::where('name', $role)->first()->id,
             ]);
+
+            $user->assignRole($role);
 
             $this->components->info('User is created');
         } else {

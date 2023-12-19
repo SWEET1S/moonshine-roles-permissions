@@ -108,11 +108,11 @@ namespace App\Models;
 // ...
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
-use Spatie\Permission\Traits\HasRoles;
+use Sweet1s\MoonshineRBAC\Traits\MoonshineRBACHasRoles;
 
 class User extends Authenticatable
 {
-    use HasRoles;
+    use MoonshineRBACHasRoles;
 
     const SUPER_ADMIN_ROLE_ID = 1;
 
