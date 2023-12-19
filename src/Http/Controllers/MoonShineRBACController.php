@@ -32,15 +32,16 @@ class MoonShineRBACController extends MoonShineController
             return back();
         }
 
-        $authUserRole = MoonShineAuth::guard()->user()?->role;
+        $authUserRole = MoonShineAuth::guard()->user()?->roles;
 
-        if ($authUserRole == null) {
+        if ($authUserRole->isEmpty()) {
+
             MoonShineUI::toast(
                 trans('moonshine-rbac::ui.unauthorized'),
                 'error'
             );
 
-            Log::error('[MoonShineRBACController] attachPermissionsToRole: User has no role');
+            Log::error('[MoonShineRBACController] attachPermissionsToRole: Your account has no role');
 
             return back();
         }
