@@ -8,7 +8,7 @@ trait HasMoonShineRolePermissions
 {
     public function getRolePriorityAttribute($value)
     {
-        return json_decode($value, true) ?? [];
+        return $value !== null ? json_decode($value, true) : [];
     }
 
     public function isHavePermission(string $resourceClass, string $ability): bool
