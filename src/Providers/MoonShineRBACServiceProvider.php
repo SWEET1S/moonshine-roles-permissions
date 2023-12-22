@@ -5,7 +5,6 @@ namespace Sweet1s\MoonshineRBAC\Providers;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\ServiceProvider;
 use MoonShine\Contracts\Resources\ResourceContract;
-use MoonShine\MoonShine;
 use Sweet1s\MoonshineRBAC\Commands\MoonShineRBACAssignPermissionCommand;
 use Sweet1s\MoonshineRBAC\Commands\MoonShineRBACCreatePermissionsResourceCommand;
 use Sweet1s\MoonshineRBAC\Commands\MoonShineRBACInstallCommand;
@@ -49,7 +48,7 @@ final class MoonShineRBACServiceProvider extends ServiceProvider
             __DIR__ . '/../../lang' => resource_path('lang/vendor/moonshine-rbac'),
         ], 'moonshine-rbac-lang');
 
-        MoonShine::defineAuthorization(
+        moonshine()->defineAuthorization(
             static function (ResourceContract $resource, Model $user, string $ability): bool {
 
                 $hasRolePermissionsTrait = in_array(
