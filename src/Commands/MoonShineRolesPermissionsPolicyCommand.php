@@ -69,7 +69,9 @@ class MoonShineRolesPermissionsPolicyCommand extends MoonShineRolesPermissionsCo
         ]);
 
         $modalPath = config('moonshine.auth.providers.moonshine.model');
-        $path = "App\Policies\\" . ($this->option('name') ?? $this->modelName . 'Policy') . ".php";
+        $path = "Policies/" . ($this->option('name') ?? $this->modelName . 'Policy') . ".php";
+
+        $path = app_path($path);
 
         $this->copyStub("Policy", $path, [
             '{model}' => "App\Models\\$this->modelName" == $modalPath ? "" : "use App\Models\\$this->modelName;",
