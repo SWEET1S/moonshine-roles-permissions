@@ -97,7 +97,7 @@ final class RolePermissionsFormComponent extends MoonShineComponent
                     'class' => 'permission_switcher_section',
                     '@change' => "document
                           .querySelectorAll('.$class')
-                          .forEach((el) => {el.checked = parseInt(event.target.value); el.dispatchEvent(new Event('change'))})",
+                          .forEach((el) => {el.checked = !parseInt(event.target.value); el.dispatchEvent(new Event('change'))})",
                 ])->setValue($allSections)->hint('Toggle off/on all'),
 
                 ...$checkboxes,
@@ -113,7 +113,7 @@ final class RolePermissionsFormComponent extends MoonShineComponent
                     '@change' => <<<'JS'
                         document
                           .querySelectorAll('.permission_switcher, .permission_switcher_section')
-                          .forEach((el) => {el.checked = parseInt(event.target.value); el.dispatchEvent(new Event('change'))})
+                          .forEach((el) => {el.checked = !parseInt(event.target.value); el.dispatchEvent(new Event('change'))})
                     JS,
                 ])->setValue($all),
                 Divider::make(),
