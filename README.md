@@ -182,6 +182,31 @@ MenuGroup::make('System', [
 ], 'heroicons.outline.user-group'),
 
 ```
+---
+
+## Dynamic Items on Menu
+
+If you want to add dynamic items to the menu that depend on the role right, you just need to add an array of menus to the MenuRBAC::menu() adapter.
+
+```PHP
+protected function menu(): array
+{
+    return MenuRBAC::menu(
+        MenuGroup::make('System', [
+            MenuItem::make('Admins', new \Sweet1s\MoonshineRBAC\Resource\UserResource(), 'heroicons.outline.users'),
+            MenuItem::make('Roles', new \Sweet1s\MoonshineRBAC\Resource\RoleResource(), 'heroicons.outline.shield-exclamation'),
+        ], 'heroicons.outline.user-group'),
+
+        MenuItem::make(trans('moonshine::general.orders'), new OrderResource(), 'heroicons.outline.shopping-cart')
+            ->badge(function(){
+                return Order::where('status', Status::Completed->name)->count();
+            }),
+
+        //...
+    );
+}
+```
+
 
 ---
 
