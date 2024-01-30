@@ -34,9 +34,9 @@ class MenuRBAC
 
     /**
      * @param MenuElement $item
-     * @return mixed|MenuElement|void
+     * @return void
      */
-    private function checkPermission(MenuElement $item)
+    private function checkPermission(MenuElement $item): void
     {
         if (method_exists($item, 'items')) {
             foreach ($item->items() as $item) {
@@ -45,7 +45,7 @@ class MenuRBAC
         }
 
         if (!$item instanceof MenuItem || !$item?->getFiller() instanceof ModelResource) {
-            return $item;
+            return;
         }
 
         $resource = $item->getFiller();
@@ -91,9 +91,13 @@ class MenuRBAC
         }
 
         $item->canSee(function () use ($item) {
-            return array_reduce($item->items()->toArray(), function ($carry, $element) {
-                return $carry || $element->isSee([]);
-            }, false);
+            if (
+                $item->items()->count() == 0 || ($item->items()->count() == 1 && !$item->items()?->first() instanceof MenuItem)
+            ) {
+                return false;
+            }
+
+            return true;
         });
     }
 }
