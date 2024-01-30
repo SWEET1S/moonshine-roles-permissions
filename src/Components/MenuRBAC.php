@@ -1,6 +1,6 @@
 <?php
 
-namespace Sweet1s\MoonshineRBAC\Component;
+namespace Sweet1s\MoonshineRBAC\Components;
 
 use MoonShine\Menu\MenuElement;
 use MoonShine\Menu\MenuGroup;
