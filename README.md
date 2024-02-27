@@ -9,6 +9,17 @@ extension is to streamline role-based access control (RBAC) within the MoonShine
 you can efficiently assign permissions to roles and then grant those roles to users, simplifying the process of managing
 permissions on a role-based level rather than individually assigning them to each user.
 
+<p align="center">
+<a href="https://packagist.org/packages/sweet1s/moonshine-roles-permissions"><img src="https://img.shields.io/packagist/dt/sweet1s/moonshine-roles-permissions" alt="Total Downloads"></a>
+<a href="https://packagist.org/packages/sweet1s/moonshine-roles-permissions"><img src="https://img.shields.io/packagist/v/sweet1s/moonshine-roles-permissions" alt="Latest Stable Version"></a>
+<a href="https://packagist.org/packages/sweet1s/moonshine-roles-permissions"><img src="https://img.shields.io/packagist/l/sweet1s/moonshine-roles-permissions" alt="License"></a>
+</p>
+<p align="center">
+    <a href="https://laravel.com"><img alt="Laravel 9+" src="https://img.shields.io/badge/Laravel-10+-FF2D20?style=for-the-badge&logo=laravel"></a>
+    <a href="https://laravel.com"><img alt="PHP 8+" src="https://img.shields.io/badge/PHP-8.1+-777BB4?style=for-the-badge&logo=php"></a>
+    <a href="https://github.com/moonshine-software/moonshine"><img alt="Moonshine Admin Panel" src="https://img.shields.io/badge/Moonshine-2.0+-1B253B?style=for-the-badge"></a>
+</p>
+
 ---
 
 > ### Requirements
