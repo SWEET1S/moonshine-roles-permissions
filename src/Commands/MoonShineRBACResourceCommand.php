@@ -30,9 +30,7 @@ class MoonShineRBACResourceCommand extends Command
 
         $arguments = [];
 
-        if ($this->argument('name')) {
-            $arguments['name'] = $this->argument('name');
-        }
+        $arguments['name'] = $this->argument('name') ?? $this->ask('Name of the resource');
 
         if ($this->option('model')) {
             $arguments['--model'] = $this->option('model');
@@ -44,7 +42,7 @@ class MoonShineRBACResourceCommand extends Command
 
         $this->call('moonshine:resource', $arguments);
 
-        $name = $this->argument('name');
+        $name = $arguments['name'];
 
         if (!str_contains($name, 'Resource')) {
             $name .= 'Resource';
