@@ -136,6 +136,7 @@ class User extends Authenticatable
 ```bash
 php artisan moonshine-rbac:install
 ```
+>If the package is being installed in a project where MoonShine resources are already implemented, and you want to automatically add permissions to these resources, you need to add the WithRolePermissions attribute to the resources. [Usage](#usage)
 
 8. (Optional) Create a user with new modal and assign automatically the role "Super Admin" to it.
 
