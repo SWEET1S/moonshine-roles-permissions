@@ -59,3 +59,10 @@ Optional parameters:
 -   name: The name of the resource. If not specified, you will be prompted to enter it.
 -   model: The name of the model. If not specified, the name of the resource will be used.
 -   title: The title of the resource. If not specified, the name of the resource will be used.
+
+### 7) Command: `php artisan moonshine-rbac:init-permissions {path?}`
+
+This command creates permissions for resources that have the WithRolePermissions property, but does not apply to existing permissions.
+
+Optional parameters:
+-   path: The path to the resource. If not specified, the default path will be used (`app/MoonShine/Resources`).
