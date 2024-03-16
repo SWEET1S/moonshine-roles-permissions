@@ -7,6 +7,7 @@ use Illuminate\Support\ServiceProvider;
 use MoonShine\Contracts\Resources\ResourceContract;
 use Sweet1s\MoonshineRBAC\Commands\MoonShineRBACAssignPermissionCommand;
 use Sweet1s\MoonshineRBAC\Commands\MoonShineRBACCreatePermissionsResourceCommand;
+use Sweet1s\MoonshineRBAC\Commands\MoonShineRBACInitPermissionsCommand;
 use Sweet1s\MoonshineRBAC\Commands\MoonShineRBACInstallCommand;
 use Sweet1s\MoonshineRBAC\Commands\MoonShineRBACResourceCommand;
 use Sweet1s\MoonshineRBAC\Commands\MoonShineRBACRoleCreateCommand;
@@ -15,14 +16,14 @@ use Sweet1s\MoonshineRBAC\Traits\WithRolePermissions;
 
 final class MoonShineRBACServiceProvider extends ServiceProvider
 {
-
     protected array $commands = [
         MoonShineRBACAssignPermissionCommand::class,
         MoonShineRBACInstallCommand::class,
         MoonShineRBACRoleCreateCommand::class,
         MoonShineRBACUserCommand::class,
         MoonShineRBACResourceCommand::class,
-        MoonShineRBACCreatePermissionsResourceCommand::class
+        MoonShineRBACCreatePermissionsResourceCommand::class,
+        MoonShineRBACInitPermissionsCommand::class,
     ];
 
     public function register(): void
