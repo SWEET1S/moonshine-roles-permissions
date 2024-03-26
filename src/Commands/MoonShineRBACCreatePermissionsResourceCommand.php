@@ -2,8 +2,12 @@
 
 namespace Sweet1s\MoonshineRBAC\Commands;
 
+use SplFileInfo;
 use Illuminate\Console\Command;
+use Illuminate\Support\Facades\File;
 use Sweet1s\MoonshineRBAC\Abilities;
+
+use function Laravel\Prompts\{intro, info, warning, text, confirm, search};
 
 class MoonShineRBACCreatePermissionsResourceCommand extends Command
 {
@@ -12,7 +16,7 @@ class MoonShineRBACCreatePermissionsResourceCommand extends Command
      *
      * @var string
      */
-    protected $signature = 'moonshine-rbac:permissions {resourceName : The name of the resource like UserResource}';
+    protected $signature = 'moonshine-rbac:permissions {resourceName? : The name of the resource}';
 
     /**
      * The console command description.
@@ -33,7 +37,29 @@ class MoonShineRBACCreatePermissionsResourceCommand extends Command
      */
     public function handle(): int
     {
-        $this->resourceName = $this->argument('resourceName');
+        intro($this->description);
+
+        $this->resourceName = $this->argument('resourceName') ?? (confirm(
+            label: 'Manual entry or from a list?',
+            default: true,
+            yes: 'Manual input',
+            no: 'Select from the list',
+            hint: 'To create the resource name, we use the resources available in the application directory App/MoonShine/Resources',
+        )
+        ? text(
+            label: 'Resource name',
+            placeholder: 'E.g. UserResource',
+            required: true,
+        )
+        : search(
+            label: 'Select a resource',
+            options: fn (string $value) => collect(File::allFiles(app_path('MoonShine/Resources')))
+                ->transform(fn (SplFileInfo $file, $key) => $file->getBasename('.php'))
+                ->filter()
+                ->filter(fn (string $name) => str_contains(strtolower($name), strtolower($value)))
+                ->values()
+                ->toArray()
+        ));
 
         foreach (Abilities::getAbilities() as $ability) {
             config('permission.models.permission')::updateOrCreate([
@@ -44,8 +70,10 @@ class MoonShineRBACCreatePermissionsResourceCommand extends Command
 
         app()['cache']->forget('spatie.permission.cache');
 
-        $this->info("Permissions created successfully for $this->resourceName.");
+        warning('Make sure to include the `WithRolePermissions` trait in the resource');
 
-        return 0;
+        info("Permissions created successfully for $this->resourceName.");
+
+        return self::SUCCESS;
     }
 }

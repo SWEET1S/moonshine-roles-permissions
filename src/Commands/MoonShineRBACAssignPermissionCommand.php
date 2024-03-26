@@ -4,6 +4,8 @@ namespace Sweet1s\MoonshineRBAC\Commands;
 
 use Illuminate\Console\Command;
 
+use function Laravel\Prompts\{intro, error, info, text, confirm, select};
+
 class MoonShineRBACAssignPermissionCommand extends Command
 {
     /**
@@ -11,7 +13,7 @@ class MoonShineRBACAssignPermissionCommand extends Command
      *
      * @var string
      */
-    protected $signature = 'moonshine-rbac:assign {permission : The name of the permission} {guard? : The name of the guard}';
+    protected $signature = 'moonshine-rbac:assign {permission? : The name of the permission} {guard? : The name of the guard}';
 
     /**
      * The console command description.
@@ -27,38 +29,58 @@ class MoonShineRBACAssignPermissionCommand extends Command
      */
     public function handle(): int
     {
-        $permission = $this->argument('permission');
+        intro($this->description);
 
-        if (!config('permission.models.permission')::where('name', $permission)->exists()) {
-            $this->error("Permission {$permission} does not exist");
+        $permission = $this->argument('permission') ?? text(
+            label: 'The name of the permission',
+            placeholder: 'E.g. TestResource.view',
+            required: true,
+        );
 
-            $create = $this->confirm('Do you want to create it?');
+        $guard = $this->argument('guard') ?? text(
+            label: 'The name of the guard',
+            default: config('moonshine.auth.guard')
+        );
+
+        $config_model_permission = config('permission.models.permission');
+
+        if (!$config_model_permission::where('name', $permission)->exists()) {
+            error("Permission {$permission} does not exist");
+
+            $create = confirm(
+                label: 'Do you want to create it?',
+                default: true
+            );
+
             if ($create) {
-
-                config('permission.models.permission')::create([
+                $config_model_permission::create([
                     'name' => $permission,
-                    'guard_name' => $this->argument('guard') ?? config('moonshine.auth.guard')
+                    'guard_name' => $guard
                 ]);
 
-                $this->info("Permission {$permission} is created");
+                info("Permission {$permission} is created");
             } else {
-                return 1;
+                return self::FAILURE;
             }
         }
 
         app()['cache']->forget('spatie.permission.cache');
 
-        $roles = config('permission.models.role')::all()->pluck('name')->toArray();
-        $role = $this->choice('Select role', $roles, 0);
+        info("Assign a {$permission} permission to a role:");
 
-        if ($role) {
-            $role = config('permission.models.role')::where('name', $role)->first();
-            $role->givePermissionTo($permission);
-            $this->info("Permission {$permission} is assigned to role {$role->name}");
-        } else {
-            $this->error('Role is required');
-        }
+        $config_model_role = config('permission.models.role');
 
-        return 0;
+        $role_id = select(
+            'Select role',
+            $config_model_role::pluck('name', 'id'),
+        );
+
+        $role = $config_model_role::findOrFail($role_id);
+
+        $role->givePermissionTo($permission);
+
+        info("Permission {$permission} is assigned to role {$role->name}");
+
+        return self::SUCCESS;
     }
 }

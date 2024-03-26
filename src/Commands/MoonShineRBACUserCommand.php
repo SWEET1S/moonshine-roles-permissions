@@ -3,7 +3,8 @@
 namespace Sweet1s\MoonshineRBAC\Commands;
 
 use Illuminate\Console\Command;
-use Illuminate\Support\Facades\DB;
+
+use function Laravel\Prompts\{intro, info, text, password, select};
 
 class MoonShineRBACUserCommand extends Command
 {
@@ -28,31 +29,54 @@ class MoonShineRBACUserCommand extends Command
      */
     public function handle(): int
     {
-        $name = $this->ask('Name');
-        $name = ucfirst($name);
+        intro($this->description);
 
-        $email = $this->ask('Email');
+        $name = ucfirst(text(
+            label: 'Name',
+            placeholder: 'E.g. Andrey',
+            required: 'Your name is required.',
+        ));
 
-        $password = $this->secret('Password');
+        $email = text(
+            label: 'Email',
+            placeholder: 'E.g. info@site.com',
+            required: 'Your email is required.',
+            validate: fn ($value) => match (true) {
+                !filter_var($value, FILTER_VALIDATE_EMAIL) => 'Email is not valid',
+                default => null
+            }
+        );
 
-        $roles = config('permission.models.role')::all()->pluck('name')->toArray();
-        $role = $this->choice('Select role', $roles, 0);
+        $password = password(
+            label: 'Password',
+            required: 'The password is required.',
+            hint: 'The password must be at least 8 characters long and contain at least one uppercase letter, one lowercase letter, one digit and a special character.',
+            validate: fn (string $value) => match (true) {
+                strlen($value) < 8 => 'The password must be at least 8 characters.',
+                !preg_match('/[A-Z]/', $value) => 'The password must contain at least one uppercase letter.',
+                !preg_match('/[a-z]/', $value) => 'The password must contain at least one lowercase letter.',
+                !preg_match('/[0-9]/', $value) => 'The password must contain at least one number.',
+                !preg_match('/[^A-Za-z0-9]/', $value) => 'The password must contain at least one special character.',
 
-        if ($email && $name && $password && $role) {
+                default => null
+            }
+        );
 
-            $user = config('moonshine.auth.providers.moonshine.model')::create([
-                'name' => $name,
-                'email' => $email,
-                'password' => bcrypt($password),
-            ]);
+        $role_id = select(
+            'Select role',
+            config('permission.models.role')::pluck('name', 'id'),
+        );
 
-            $user->assignRole($role);
+        $user = config('moonshine.auth.providers.moonshine.model')::create([
+            'name' => $name,
+            'email' => $email,
+            'password' => bcrypt($password),
+        ]);
 
-            $this->components->info('User is created');
-        } else {
-            $this->components->error('All params is required');
-        }
+        $user->assignRole($role_id);
 
-        return 0;
+        info('The user has been created.');
+
+        return self::SUCCESS;
     }
 }
