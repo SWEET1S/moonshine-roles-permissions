@@ -2,10 +2,12 @@
 
 namespace Sweet1s\MoonshineRBAC\Commands;
 
-use Illuminate\Console\Command;
 use SplFileInfo;
+use Illuminate\Console\Command;
 use Illuminate\Support\Facades\File;
 use Sweet1s\MoonshineRBAC\Traits\WithRolePermissions;
+
+use function Laravel\Prompts\{intro, text, info};
 
 class MoonShineRBACInitPermissionsCommand extends Command
 {
@@ -35,13 +37,18 @@ class MoonShineRBACInitPermissionsCommand extends Command
      */
     public function handle(): int
     {
-        $this->info($this->description);
+        intro($this->description);
 
-        $this->path = $this->argument('path') ?? app_path('MoonShine/Resources');
+        $this->path = app_path($this->argument('path') ?? text(
+            label: 'Path to resources',
+            default: 'MoonShine/Resources',
+            required: true,
+            hint: "The path to the resources from the 'app'",
+        ));
 
         $this->generatePermissionsForResources();
 
-        $this->info('Permissions generated successfully');
+        info('Permissions generated successfully');
 
         return self::SUCCESS;
     }

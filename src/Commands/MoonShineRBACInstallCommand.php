@@ -4,6 +4,8 @@ namespace Sweet1s\MoonshineRBAC\Commands;
 
 use Illuminate\Console\Command;
 
+use function Laravel\Prompts\{intro, info};
+
 class MoonShineRBACInstallCommand extends Command
 {
     /**
@@ -28,7 +30,7 @@ class MoonShineRBACInstallCommand extends Command
     public function handle(): int
     {
 
-        $this->info('Installing MoonShine Roles-Permissions package...');
+        intro('Installing MoonShine Roles-Permissions package...');
 
         $this->migration();
 
@@ -42,11 +44,9 @@ class MoonShineRBACInstallCommand extends Command
 
         $this->createRole();
 
-        $this->info("\n");
+        info('MoonShine Roles-Permissions package installed successfully.');
 
-        $this->info('MoonShine Roles-Permissions package installed successfully.');
-
-        return 0;
+        return self::SUCCESS;
     }
 
     public function migration(): void
@@ -67,7 +67,7 @@ class MoonShineRBACInstallCommand extends Command
                 'name' => 'Super Admin'
             ]);
 
-            $this->info("Super Admin role created successfully.");
+            info("Super Admin role created successfully.");
         }
     }
 }
