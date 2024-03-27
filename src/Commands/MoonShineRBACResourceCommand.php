@@ -96,20 +96,16 @@ class MoonShineRBACResourceCommand extends Command
         } elseif ($this->option('pest')) {
             $arguments['--pest'] = $this->option('pest');
         } else {
-            $confirm_test = confirm(
-                label: 'Generate tests?',
-                default: true,
+            $test  = select(
+                label: 'Select the type of test if necessary?',
+                options: [
+                    'not' => 'Not',
+                    '--test' => 'Test',
+                    '--pest' => 'Pest'
+                ],
+                required: true,
             );
-
-            if ($confirm_test) {
-                $test  = select(
-                    label: 'Select the type of test',
-                    options: [
-                        '--test' => 'Test',
-                        '--pest' => 'Pest'
-                    ],
-                    required: true,
-                );
+            if ($test !== 'not') {
                 $arguments[$test] = true;
             }
         }
