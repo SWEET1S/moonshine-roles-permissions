@@ -5,24 +5,27 @@ namespace Sweet1s\MoonshineRBAC\FormComponents;
 use Closure;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Str;
-use MoonShine\Components\FormBuilder;
-use MoonShine\Components\MoonShineComponent;
-use MoonShine\Decorations\Column;
-use MoonShine\Decorations\Divider;
-use MoonShine\Decorations\Grid;
-use MoonShine\Fields\Select;
-use MoonShine\Fields\Switcher;
-use MoonShine\MoonShineAuth;
-use MoonShine\Resources\ModelResource;
-use MoonShine\Traits\HasResource;
-use MoonShine\Traits\WithLabel;
+use MoonShine\UI\Components\FormBuilder;
+use MoonShine\UI\Components\MoonShineComponent;
+use MoonShine\UI\Components\Layout\Column;
+use MoonShine\UI\Components\Layout\Divider;
+use MoonShine\UI\Components\Layout\Grid;
+use MoonShine\UI\Fields\Select;
+use MoonShine\UI\Fields\Switcher;
+use MoonShine\Laravel\MoonShineAuth;
+use MoonShine\Laravel\Resources\ModelResource;
+use MoonShine\Core\Traits\HasResource;
+use MoonShine\UI\Traits\WithLabel;
 use Sweet1s\MoonshineRBAC\Traits\WithRolePermissions;
 
 final class RolePermissionsFormComponent extends MoonShineComponent
 {
     protected string $view = 'moonshine-rbac::form-components.permissions';
+
     protected bool $all = true;
+
     protected array $values = [];
+
     protected array $elements = [];
 
     use HasResource;
@@ -38,6 +41,8 @@ final class RolePermissionsFormComponent extends MoonShineComponent
         Closure|string $label,
         ModelResource $resource
     ) {
+        parent::__construct();
+
         $this->setResource($resource);
         $this->setLabel($label);
     }
@@ -49,7 +54,7 @@ final class RolePermissionsFormComponent extends MoonShineComponent
 
     public function getForm(): FormBuilder
     {
-        $currentUser = MoonShineAuth::guard()->user();
+        $currentUser = MoonShineAuth::getGuard()->user();
 
         foreach (moonshine()->getResources() as $resource) {
             $checkboxes = [];
@@ -60,7 +65,7 @@ final class RolePermissionsFormComponent extends MoonShineComponent
                 continue;
             }
 
-            foreach ($resource->gateAbilities() as $ability) {
+            foreach ($resource->getGateAbilities() as $ability) {
                 $hasPermission = false;
 
                 foreach ($currentUser->roles as $role) {
@@ -74,22 +79,22 @@ final class RolePermissionsFormComponent extends MoonShineComponent
                     continue;
                 }
 
-                $this->values['permissions'][$class][$ability] = $this->getItem()?->isHavePermission(
+                $this->values['permissions'][$class][$ability->value] = $this->getItem()?->isHavePermission(
                     $class,
                     $ability
                 );
 
-                if (!$this->values['permissions'][$class][$ability]) {
+                if (!$this->values['permissions'][$class][$ability->value]) {
                     $allSections = false;
                     $this->all = false;
                 }
 
                 $checkboxes[] = Switcher::make(
-                    trans("moonshine-rbac::ui.$ability"),
-                    "permissions." . $class . ".$ability"
+                    trans("moonshine-rbac::ui.$ability->value"),
+                    "permissions." . $class . ".$ability->value"
                 )
                     ->customAttributes(['class' => 'permission_switcher ' . $class])
-                    ->setName("permissions[" . $class . "][$ability]");
+                    ->setNameAttribute("permissions[" . $class . "][$ability->value]");
             }
 
             if (empty($checkboxes)) {
@@ -97,7 +102,7 @@ final class RolePermissionsFormComponent extends MoonShineComponent
             }
 
             $this->elements[] = Column::make([
-                Switcher::make(__('moonshine-rbac::ui.all') . ' ' . $resource->title())->customAttributes([
+                Switcher::make(__('moonshine-rbac::ui.all') . ' ' . $resource->getTitle())->customAttributes([
                     'class' => 'permission_switcher_section',
                     '@change' => "document
                           .querySelectorAll('.$class')
@@ -111,7 +116,7 @@ final class RolePermissionsFormComponent extends MoonShineComponent
 
         $this->customPermissions($currentUser);
 
-        return FormBuilder::make(route('moonshine-rbac.roles.attach-permissions-to-role', $this->getItem()->getKey()))
+        return FormBuilder::make(route('moonshine.moonshine-rbac.roles.attach-permissions-to-role', $this->getItem()->getKey()))
             ->fields([
                 $this->priorityField(),
                 Divider::make(),
@@ -131,11 +136,11 @@ final class RolePermissionsFormComponent extends MoonShineComponent
             ->submit(__('moonshine::ui.save'));
     }
 
-    public function priorityField()
+    public function priorityField(): Select
     {
         return Select::make(trans('moonshine-rbac::ui.can_give_the_roles'))
             ->options(
-                config('permission.models.role')::where('id', '!=', config('moonshine.auth.providers.moonshine.model')::SUPER_ADMIN_ROLE_ID)
+                config('permission.models.role')::where('id', '!=', config('moonshine.auth.model')::SUPER_ADMIN_ROLE_ID)
                     ->get()
                     ->pluck('name', 'id')
                     ->toArray()
@@ -143,13 +148,13 @@ final class RolePermissionsFormComponent extends MoonShineComponent
             ->default($this->getItem()->role_priority)
             ->searchable()
             ->multiple()
-            ->setName('role_priority[]');
+            ->setNameAttribute('role_priority[]');
     }
 
     protected function viewData(): array
     {
         return [
-            'label' => $this->label(),
+            'label' => $this->getLabel(),
             'form' => $this->getItem()?->exists
                 ? $this->getForm()
                 : '',
@@ -194,7 +199,7 @@ final class RolePermissionsFormComponent extends MoonShineComponent
                 "permissions.Custom." . $permission->name
             )
                 ->customAttributes(['class' => 'permission_switcher ' . 'customs'])
-                ->setName("permissions[Custom][$permission->name]");
+                ->setNameAttribute("permissions[Custom][$permission->name]");
         }
 
         $checkboxes = collect($checkboxes)->split(2)->toArray();

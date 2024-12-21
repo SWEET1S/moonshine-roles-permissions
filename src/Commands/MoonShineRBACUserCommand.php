@@ -67,7 +67,7 @@ class MoonShineRBACUserCommand extends Command
             config('permission.models.role')::pluck('name', 'id'),
         );
 
-        $user = config('moonshine.auth.providers.moonshine.model')::create([
+        $user = config('moonshine.auth.model')::create([
             'name' => $name,
             'email' => $email,
             'password' => bcrypt($password),

@@ -23,7 +23,7 @@ permissions on a role-based level rather than individually assigning them to eac
 ---
 
 > ### Requirements
-> Moonshine: v2.0+
+> Moonshine: v3.0+
 >
 > Spatie Laravel Permissions: v6.0+
 
@@ -70,12 +70,8 @@ return [
     // ...
     'auth' => [
         // ...
-        'providers' => [
-            'moonshine' => [
-                'driver' => 'eloquent',
-                'model' => \App\Models\User::class,
-            ],
-        ],
+        'model' => \App\Models\User::class,
+        // ...
     ],
     // ...
 ];
@@ -188,11 +184,21 @@ Or add new MoonShine resource to your MoonShineServiceProvider file, like this (
 ```PHP
 
 MenuGroup::make('System', [
-    MenuItem::make('Admins', new \Sweet1s\MoonshineRBAC\Resource\UserResource(), 'heroicons.outline.users'),
-    MenuItem::make('Roles', new \Sweet1s\MoonshineRBAC\Resource\RoleResource(), 'heroicons.outline.shield-exclamation'),
-    MenuItem::make('Permissions', new \Sweet1s\MoonshineRBAC\Resource\PermissionResource(), 'heroicons.outline.shield-exclamation'),
-], 'heroicons.outline.user-group'),
+    MenuItem::make('Admins', \Sweet1s\MoonshineRBAC\Resource\UserResource::class, 'users'),
+    MenuItem::make('Roles', \Sweet1s\MoonshineRBAC\Resource\RoleResource::class, 'shield-exclamation'),
+    MenuItem::make('Permissions', \Sweet1s\MoonshineRBAC\Resource\PermissionResource::class, 'shield-exclamation'),
+], 'user-group'),
+```
 
+Don't forget to declare resources in the system
+
+```php
+$core
+    ->resources([
+        \Sweet1s\MoonshineRBAC\Resource\UserResource::class,
+        \Sweet1s\MoonshineRBAC\Resource\RoleResource::class,
+        \Sweet1s\MoonshineRBAC\Resource\PermissionResource::class,
+    ])
 ```
 ---
 
@@ -205,11 +211,11 @@ protected function menu(): array
 {
     return MenuRBAC::menu(
         MenuGroup::make('System', [
-            MenuItem::make('Admins', new \Sweet1s\MoonshineRBAC\Resource\UserResource(), 'heroicons.outline.users'),
-            MenuItem::make('Roles', new \Sweet1s\MoonshineRBAC\Resource\RoleResource(), 'heroicons.outline.shield-exclamation'),
-        ], 'heroicons.outline.user-group'),
+            MenuItem::make('Admins', \Sweet1s\MoonshineRBAC\Resource\UserResource::class, 'users'),
+            MenuItem::make('Roles', \Sweet1s\MoonshineRBAC\Resource\RoleResource::class, 'shield-exclamation'),
+        ], 'user-group'),
 
-        MenuItem::make(trans('moonshine::general.orders'), new OrderResource(), 'heroicons.outline.shopping-cart')
+        MenuItem::make(trans('moonshine::general.orders'), OrderResource::class, 'shopping-cart')
             ->badge(function(){
                 return Order::where('status', Status::Completed->name)->count();
             }),
@@ -224,7 +230,7 @@ protected function menu(): array
 
 ## Usage
 
-1. [Creating a section in the admin panel with MoonShine](https://moonshine-laravel.com/docs/section/resources-index)
+1. [Creating a section in the admin panel with MoonShine](https://moonshine-laravel.com/docs/3.x/model-resource/index)
 
 ```bash
 php artisan moonshine:resource Post

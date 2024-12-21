@@ -1,6 +1,6 @@
 @if($item->exists)
 
-    <x-moonshine::divider />
+    <x-moonshine::layout.divider />
 
     <x-moonshine::title class="mb-6">
         {{ $label }}

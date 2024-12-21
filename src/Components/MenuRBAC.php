@@ -2,11 +2,11 @@
 
 namespace Sweet1s\MoonshineRBAC\Components;
 
-use MoonShine\Menu\MenuElement;
-use MoonShine\Menu\MenuGroup;
-use MoonShine\Menu\MenuItem;
-use MoonShine\MoonShineAuth;
-use MoonShine\Resources\ModelResource;
+use MoonShine\MenuManager\MenuElement;
+use MoonShine\MenuManager\MenuGroup;
+use MoonShine\MenuManager\MenuItem;
+use MoonShine\Laravel\MoonShineAuth;
+use MoonShine\Laravel\Resources\ModelResource;
 use Sweet1s\MoonshineRBAC\Traits\WithRolePermissions;
 
 class MenuRBAC
@@ -69,7 +69,7 @@ class MenuRBAC
      */
     private function userHasViewAnyPermission(ModelResource $resource): bool
     {
-        $user = MoonShineAuth::guard()->user();
+        $user = MoonShineAuth::getGuard()->user();
 
         foreach ($user->roles as $role) {
             if ($role->isHavePermission(class_basename($resource::class), 'viewAny')) {

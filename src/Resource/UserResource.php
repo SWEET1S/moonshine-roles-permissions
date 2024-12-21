@@ -4,18 +4,17 @@ namespace Sweet1s\MoonshineRBAC\Resource;
 
 use App\Models\User as User;
 use Illuminate\Validation\Rule;
-use MoonShine\Decorations\Block;
-use MoonShine\Decorations\Column;
-use MoonShine\Decorations\Grid;
-use MoonShine\Fields\Date;
-use MoonShine\Fields\Email;
-use MoonShine\Fields\ID;
-use MoonShine\Fields\Image;
-use MoonShine\Fields\Password;
-use MoonShine\Fields\PasswordRepeat;
-use MoonShine\Fields\Text;
-use MoonShine\FormComponents\ChangeLogFormComponent;
-use MoonShine\Resources\ModelResource;
+use MoonShine\Laravel\Resources\ModelResource;
+use MoonShine\UI\Components\Layout\Box;
+use MoonShine\UI\Components\Layout\Column;
+use MoonShine\UI\Components\Layout\Grid;
+use MoonShine\UI\Fields\Date;
+use MoonShine\UI\Fields\Email;
+use MoonShine\UI\Fields\ID;
+use MoonShine\UI\Fields\Image;
+use MoonShine\UI\Fields\Password;
+use MoonShine\UI\Fields\PasswordRepeat;
+use MoonShine\UI\Fields\Text;
 use Sweet1s\MoonshineRBAC\Traits\WithRoleFormComponent;
 use Sweet1s\MoonshineRBAC\Traits\WithRolePermissions;
 
@@ -24,41 +23,76 @@ class UserResource extends ModelResource
     use WithRolePermissions;
     use WithRoleFormComponent;
 
-    public string $model = User::class;
-    public string $titleField = 'name';
+    protected string $model = User::class;
 
-    public function title(): string
+    protected string $column = 'name';
+
+    public function getTitle(): string
     {
         return trans('moonshine::ui.resource.admins_title');
     }
 
-    public function fields(): array
+    protected function indexFields(): iterable
+    {
+        return [
+            ID::make(),
+
+            Text::make(
+                trans('moonshine::ui.resource.name'),
+                'name'
+            ),
+
+            Image::make(
+                trans('moonshine::ui.resource.avatar'),
+                'avatar'
+            )
+                ->removable()
+                ->disk(config('filesystems.default'))
+                ->dir('moonshine_users')
+                ->allowedExtensions(
+                    ['jpg', 'png', 'jpeg', 'gif']
+                ),
+
+            Date::make(
+                trans('moonshine::ui.resource.created_at'),
+                'created_at'
+            )
+                ->format("d.m.Y")
+                ->default(now()->toDateTimeString()),
+
+            Email::make(
+                trans('moonshine::ui.resource.email'),
+                'email'
+            ),
+        ];
+    }
+
+    protected function detailFields(): iterable
+    {
+        return $this->indexFields();
+    }
+
+    protected function formFields(): iterable
     {
         return [
             Grid::make([
                 Column::make([
-                    Block::make(
+                    Box::make(
                         trans('moonshine::ui.resource.main_information'),
                         [
-                            ID::make()
-                                ->sortable()
-                                ->useOnImport()
-                                ->showOnExport(),
+                            ID::make(),
 
                             Text::make(
                                 trans('moonshine::ui.resource.name'),
                                 'name'
                             )
-                                ->required()
-                                ->useOnImport()
-                                ->showOnExport(),
+                                ->required(),
 
                             Image::make(
                                 trans('moonshine::ui.resource.avatar'),
                                 'avatar'
                             )
                                 ->removable()
-                                ->showOnExport()
                                 ->disk(config('filesystems.default'))
                                 ->dir('moonshine_users')
                                 ->allowedExtensions(
@@ -70,22 +104,17 @@ class UserResource extends ModelResource
                                 'created_at'
                             )
                                 ->format("d.m.Y")
-                                ->default(now()->toDateTimeString())
-                                ->sortable()
-                                ->hideOnForm()
-                                ->showOnExport(),
+                                ->default(now()->toDateTimeString()),
 
                             Email::make(
                                 trans('moonshine::ui.resource.email'),
                                 'email'
                             )
-                                ->sortable()
-                                ->showOnExport()
                                 ->required(),
                         ]
                     ),
 
-                    Block::make(
+                    Box::make(
                         trans('moonshine::ui.resource.change_password'),
                         [
                             Password::make(
@@ -95,9 +124,6 @@ class UserResource extends ModelResource
                                 ->customAttributes(
                                     ['autocomplete' => 'new-password']
                                 )
-                                ->hideOnIndex()
-                                ->hideOnExport()
-                                ->hideOnDetail()
                                 ->eye(),
 
                             PasswordRepeat::make(
@@ -107,9 +133,6 @@ class UserResource extends ModelResource
                                 ->customAttributes(
                                     ['autocomplete' => 'confirm-password']
                                 )
-                                ->hideOnIndex()
-                                ->hideOnExport()
-                                ->hideOnDetail()
                                 ->eye(),
                         ]
                     ),
@@ -118,7 +141,7 @@ class UserResource extends ModelResource
         ];
     }
 
-    public function rules($item): array
+    public function rules(mixed $item): array
     {
         return [
             'name' => 'required',

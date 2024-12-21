@@ -4,7 +4,10 @@ namespace Sweet1s\MoonshineRBAC\Providers;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\ServiceProvider;
-use MoonShine\Contracts\Resources\ResourceContract;
+use MoonShine\Contracts\Core\DependencyInjection\ConfiguratorContract;
+use MoonShine\Contracts\Core\DependencyInjection\CoreContract;
+use MoonShine\Contracts\Core\ResourceContract;
+use MoonShine\Laravel\Enums\Ability;
 use Sweet1s\MoonshineRBAC\Commands\MoonShineRBACAssignPermissionCommand;
 use Sweet1s\MoonshineRBAC\Commands\MoonShineRBACCreatePermissionsResourceCommand;
 use Sweet1s\MoonshineRBAC\Commands\MoonShineRBACInitPermissionsCommand;
@@ -33,7 +36,7 @@ final class MoonShineRBACServiceProvider extends ServiceProvider
         //
     }
 
-    public function boot(): void
+    public function boot(ConfiguratorContract $config,): void
     {
         $this->loadRoutesFrom(__DIR__ . '/../../routes/moonshine-rbac.php');
 
@@ -51,8 +54,8 @@ final class MoonShineRBACServiceProvider extends ServiceProvider
             __DIR__ . '/../../lang' => resource_path('lang/vendor/moonshine-rbac'),
         ], 'moonshine-rbac-lang');
 
-        moonshine()->defineAuthorization(
-            static function (ResourceContract $resource, Model $user, string $ability): bool {
+        $config->authorizationRules(
+            static function (ResourceContract $resource, Model $user, Ability $ability): bool {
 
                 $hasRolePermissionsTrait = in_array(
                     WithRolePermissions::class,
@@ -69,7 +72,7 @@ final class MoonShineRBACServiceProvider extends ServiceProvider
                 foreach ($user->roles as $role) {
                     $hasPermission = $role->isHavePermission(
                         class_basename($resource::class),
-                        $ability
+                        $ability->value
                     );
 
                     if ($hasPermission) {

@@ -2,15 +2,16 @@
 
 namespace Sweet1s\MoonshineRBAC\FormComponents;
 
+use Closure;
 use Illuminate\Database\Eloquent\Model;
-use MoonShine\Components\FormBuilder;
-use MoonShine\Components\MoonShineComponent;
-use MoonShine\Decorations\Block;
-use MoonShine\Fields\Select;
-use MoonShine\MoonShineAuth;
-use MoonShine\Resources\ModelResource;
-use MoonShine\Traits\HasResource;
-use MoonShine\Traits\WithLabel;
+use MoonShine\Core\Traits\HasResource;
+use MoonShine\UI\Components\FormBuilder;
+use MoonShine\UI\Components\MoonShineComponent;
+use MoonShine\UI\Components\Layout\Box;
+use MoonShine\UI\Fields\Select;
+use MoonShine\Laravel\MoonShineAuth;
+use MoonShine\Laravel\Resources\ModelResource;
+use MoonShine\UI\Traits\WithLabel;
 
 final class RoleFormComponent extends MoonShineComponent
 {
@@ -30,6 +31,8 @@ final class RoleFormComponent extends MoonShineComponent
         ModelResource  $resource
     )
     {
+        parent::__construct();
+
         $this->setResource($resource);
         $this->setLabel($label);
     }
@@ -43,14 +46,14 @@ final class RoleFormComponent extends MoonShineComponent
     {
         $roles = $this->getRoles();
 
-        return FormBuilder::make(route('moonshine-rbac.roles.attach-roles-to-user', $this->getItem()))
+        return FormBuilder::make(route('moonshine.moonshine-rbac.roles.attach-roles-to-user', $this->getItem()))
             ->fields([
-                Block::make([
+                Box::make([
                     Select::make(trans('moonshine::ui.resource.role'))
                         ->options($roles)
                         ->searchable()
                         ->default($this->getItem()->roles->pluck('id')->toArray())
-                        ->setName('roles[]')
+                        ->setNameAttribute('roles[]')
                         ->multiple()
                 ])
             ])
@@ -60,8 +63,8 @@ final class RoleFormComponent extends MoonShineComponent
 
     public function getRoles(): array
     {
-        $user = MoonShineAuth::guard()->user();
-        $superAdminRoleID = config('moonshine.auth.providers.moonshine.model')::SUPER_ADMIN_ROLE_ID;
+        $user = MoonShineAuth::getGuard()->user();
+        $superAdminRoleID = config('moonshine.auth.model')::SUPER_ADMIN_ROLE_ID;
 
         if (in_array($superAdminRoleID, $user?->roles->pluck('id')->toArray())) {
             return config('permission.models.role')::where('id', '!=', $superAdminRoleID)
@@ -83,7 +86,7 @@ final class RoleFormComponent extends MoonShineComponent
     protected function viewData(): array
     {
         return [
-            'label' => $this->label(),
+            'label' => $this->getLabel(),
             'form' => $this->getItem()?->exists
                 ? $this->getForm()
                 : '',

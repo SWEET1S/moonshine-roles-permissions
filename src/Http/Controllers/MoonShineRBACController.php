@@ -4,41 +4,45 @@ namespace Sweet1s\MoonshineRBAC\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
-use MoonShine\Http\Controllers\MoonShineController;
-use MoonShine\MoonShineAuth;
-use MoonShine\MoonShineUI;
+use MoonShine\Laravel\Contracts\Notifications\MoonShineNotificationContract;
+use MoonShine\Laravel\Http\Controllers\MoonShineController;
+use MoonShine\Laravel\MoonShineAuth;
+use MoonShine\Laravel\MoonShineUI;
+use MoonShine\Support\Enums\ToastType;
 use Spatie\Permission\Models\Role;
 
 class MoonShineRBACController extends MoonShineController
 {
-
     private int $superAdminRoleId;
 
-    public function __construct()
+    public function __construct(
+        protected MoonShineNotificationContract $notification,
+    )
     {
-        $this->superAdminRoleId = config('moonshine.auth.providers.moonshine.model')::SUPER_ADMIN_ROLE_ID;
+        parent::__construct($notification);
+
+        $this->superAdminRoleId = config('moonshine.auth.model')::SUPER_ADMIN_ROLE_ID;
     }
 
     public function attachPermissionsToRole(Request $request, Role $role)
     {
-
         if ($request->get('permissions') == null) {
             $role->syncPermissions([]);
 
             MoonShineUI::toast(
                 trans('moonshine::ui.saved'),
-                'success'
+                ToastType::SUCCESS
             );
             return back();
         }
 
-        $authUserRoles = MoonShineAuth::guard()->user()?->roles;
+        $authUserRoles = MoonShineAuth::getGuard()->user()?->roles;
 
         if ($authUserRoles->isEmpty()) {
 
             MoonShineUI::toast(
                 trans('moonshine-rbac::ui.unauthorized'),
-                'error'
+                ToastType::ERROR
             );
 
             Log::error('[MoonShineRBACController] attachPermissionsToRole: Your account has no role');
@@ -49,7 +53,7 @@ class MoonShineRBACController extends MoonShineController
         if (!(in_array($this->superAdminRoleId, $authUserRoles->pluck('id')->toArray()))) {
             MoonShineUI::toast(
                 trans('moonshine-rbac::ui.unauthorized'),
-                'error'
+                ToastType::ERROR
             );
 
             Log::error('[MoonShineRBACController] attachPermissionsToRole: You cannot edit permissions of Super Admin role');
@@ -79,7 +83,7 @@ class MoonShineRBACController extends MoonShineController
 
                 MoonShineUI::toast(
                     trans('moonshine-rbac::ui.unauthorized'),
-                    'error'
+                    ToastType::ERROR
                 );
 
                 Log::error('[MoonShineRBACController] attachPermissionsToRole: User has no permission to ' . $permission);
@@ -101,7 +105,7 @@ class MoonShineRBACController extends MoonShineController
 
         MoonShineUI::toast(
             trans('moonshine::ui.saved'),
-            'success'
+            ToastType::SUCCESS
         );
 
         return back();
@@ -109,24 +113,24 @@ class MoonShineRBACController extends MoonShineController
 
     public function attachRolesToUser(Request $request, $user)
     {
-        $user = config('moonshine.auth.providers.moonshine.model')::findOrFail($user);
+        $user = config('moonshine.auth.model')::findOrFail($user);
 
         if (in_array($this->superAdminRoleId, $user?->roles->pluck('id')->toArray())) {
             MoonShineUI::toast(
                 trans('moonshine-rbac::ui.unauthorized'),
-                'error'
+                ToastType::ERROR
             );
 
             return back();
         }
 
-        $authenticatedUser = MoonShineAuth::guard()->user();
+        $authenticatedUser = MoonShineAuth::getGuard()->user();
 
         if (!$this->hasPermissionsToSyncRoles($authenticatedUser, $user, $request)) {
 
             MoonShineUI::toast(
                 trans('moonshine-rbac::ui.unauthorized'),
-                'error'
+                ToastType::ERROR
             );
 
             return back();
@@ -138,7 +142,7 @@ class MoonShineRBACController extends MoonShineController
 
         MoonShineUI::toast(
             trans('moonshine::ui.saved'),
-            'success'
+            ToastType::SUCCESS
         );
 
         return back();

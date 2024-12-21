@@ -2,22 +2,19 @@
 
 namespace Sweet1s\MoonshineRBAC\Traits;
 
-use MoonShine\Enums\Layer;
-use MoonShine\Enums\PageType;
+use MoonShine\Support\Enums\Layer;
 use Sweet1s\MoonshineRBAC\FormComponents\RolePermissionsFormComponent;
 
 trait WithPermissionsFormComponent
 {
-    protected function bootWithPermissionsFormComponent(): void
+    protected function loadWithPermissionsFormComponent(): void
     {
-        $this->getPages()
-            ->findByUri(PageType::FORM->value)
-            ->pushToLayer(
-                layer: Layer::BOTTOM,
-                component: RolePermissionsFormComponent::make(
-                    label: trans('moonshine-rbac::ui.permissions'),
-                    resource: $this,
-                )
-            );
+        $this->getFormPage()?->pushToLayer(
+            layer: Layer::BOTTOM,
+            component: RolePermissionsFormComponent::make(
+                label: trans('moonshine-rbac::ui.permissions'),
+                resource: $this,
+            )
+        );
     }
 }
