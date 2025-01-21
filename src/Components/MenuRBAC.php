@@ -38,17 +38,18 @@ class MenuRBAC
      */
     private function checkPermission(MenuElement $item): void
     {
-        if (method_exists($item, 'items')) {
-            foreach ($item->items() as $item) {
+        if ($item instanceof MenuGroup) {
+            foreach ($item->getItems() as $item) {
                 $this->checkPermission($item);
             }
         }
 
-        if (!$item instanceof MenuItem || !$item?->getFiller() instanceof ModelResource) {
+        $resource = $item->getFiller();
+
+        if (!$item instanceof MenuItem || !$resource instanceof ModelResource) {
             return;
         }
 
-        $resource = $item->getFiller();
         $hasRolePermissionsTrait = in_array(
             WithRolePermissions::class,
             class_uses_recursive($resource),
@@ -86,13 +87,13 @@ class MenuRBAC
      */
     private function checkChildren(MenuElement $item): void
     {
-        if (!$item instanceof MenuGroup || !method_exists($item, 'items')) {
+        if (!$item instanceof MenuGroup) {
             return;
         }
 
         $item->canSee(function () use ($item) {
             if (
-                $item->items()->count() == 0 || ($item->items()->count() == 1 && !$item->items()?->first() instanceof MenuItem)
+                $item->getItems()->count() === 0 || ($item->getItems()->count() === 1 && !$item->getItems()?->first() instanceof MenuItem)
             ) {
                 return false;
             }
