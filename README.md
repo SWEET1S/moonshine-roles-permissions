@@ -188,9 +188,9 @@ Or add new MoonShine resource to your MoonShineServiceProvider file, like this (
 ```PHP
 
 MenuGroup::make('System', [
-    MenuItem::make('Admins', new \Sweet1s\MoonshineRBAC\Resource\UserResource(), 'heroicons.outline.users'),
-    MenuItem::make('Roles', new \Sweet1s\MoonshineRBAC\Resource\RoleResource(), 'heroicons.outline.shield-exclamation'),
-    MenuItem::make('Permissions', new \Sweet1s\MoonshineRBAC\Resource\PermissionResource(), 'heroicons.outline.shield-exclamation'),
+    MenuItem::make('Admins', \Sweet1s\MoonshineRBAC\Resource\UserResource::class, 'heroicons.outline.users'),
+    MenuItem::make('Roles', \Sweet1s\MoonshineRBAC\Resource\RoleResource::class, 'heroicons.outline.shield-exclamation'),
+    MenuItem::make('Permissions', \Sweet1s\MoonshineRBAC\Resource\PermissionResource::class, 'heroicons.outline.shield-exclamation'),
 ], 'heroicons.outline.user-group'),
 
 ```
@@ -205,11 +205,11 @@ protected function menu(): array
 {
     return MenuRBAC::menu(
         MenuGroup::make('System', [
-            MenuItem::make('Admins', new \Sweet1s\MoonshineRBAC\Resource\UserResource(), 'heroicons.outline.users'),
-            MenuItem::make('Roles', new \Sweet1s\MoonshineRBAC\Resource\RoleResource(), 'heroicons.outline.shield-exclamation'),
+            MenuItem::make('Admins', \Sweet1s\MoonshineRBAC\Resource\UserResource::class, 'heroicons.outline.users'),
+            MenuItem::make('Roles',  \Sweet1s\MoonshineRBAC\Resource\RoleResource::class, 'heroicons.outline.shield-exclamation'),
         ], 'heroicons.outline.user-group'),
 
-        MenuItem::make(trans('moonshine::general.orders'), new OrderResource(), 'heroicons.outline.shopping-cart')
+        MenuItem::make(trans('moonshine::general.orders'), OrderResource::class, 'heroicons.outline.shopping-cart')
             ->badge(function(){
                 return Order::where('status', Status::Completed->name)->count();
             }),
