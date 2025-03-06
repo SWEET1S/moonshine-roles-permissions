@@ -5,7 +5,6 @@ namespace Sweet1s\MoonshineRBAC\Providers;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\ServiceProvider;
 use MoonShine\Contracts\Core\DependencyInjection\ConfiguratorContract;
-use MoonShine\Contracts\Core\DependencyInjection\CoreContract;
 use MoonShine\Contracts\Core\ResourceContract;
 use MoonShine\Laravel\Enums\Ability;
 use Sweet1s\MoonshineRBAC\Commands\MoonShineRBACAssignPermissionCommand;
@@ -51,7 +50,7 @@ final class MoonShineRBACServiceProvider extends ServiceProvider
         }
 
         $this->publishes([
-            __DIR__ . '/../../lang' => resource_path('lang/vendor/moonshine-rbac'),
+            __DIR__ . '/../../lang' => lang_path('vendor/moonshine-rbac'),
         ], 'moonshine-rbac-lang');
 
         $config->authorizationRules(
