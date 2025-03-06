@@ -44,9 +44,13 @@ class MenuRBAC
             }
         }
 
+        if (!$item instanceof MenuItem) {
+            return;
+        }
+
         $resource = $item->getFiller();
 
-        if (!$item instanceof MenuItem || !$resource instanceof ModelResource) {
+        if (!$resource instanceof ModelResource) {
             return;
         }
 
