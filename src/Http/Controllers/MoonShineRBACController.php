@@ -24,8 +24,10 @@ class MoonShineRBACController extends MoonShineController
         $this->superAdminRoleId = config('moonshine.auth.model')::SUPER_ADMIN_ROLE_ID;
     }
 
-    public function attachPermissionsToRole(Request $request, Role $role)
+    // TODO: Consider proper type-hinting for $role parameter
+    public function attachPermissionsToRole(Request $request, $role)
     {
+        $role = config('permission.models.role')::findOrFail($role);
         if ($request->get('permissions') == null) {
             $role->syncPermissions([]);
 
