@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace Sweet1s\MoonshineRBAC\Resource;
 
-use Illuminate\Database\Eloquent\Model;
 use MoonShine\Contracts\Core\DependencyInjection\CoreContract;
+use MoonShine\Contracts\Core\TypeCasts\DataWrapperContract;
 use MoonShine\Contracts\UI\ComponentContract;
 use MoonShine\Laravel\Resources\ModelResource;
 use MoonShine\UI\Components\Layout\Box;
@@ -136,7 +136,7 @@ class PermissionResource extends ModelResource
         ];
     }
 
-    protected function beforeCreating(mixed $item): mixed
+    protected function beforeCreating(DataWrapperContract $item): DataWrapperContract
     {
         $item->name = moonshineRequest()->get('resource') . '.' . moonshineRequest()->get('ability');
 
@@ -148,7 +148,7 @@ class PermissionResource extends ModelResource
         return $item;
     }
 
-    protected function beforeUpdating(mixed $item): mixed
+    protected function beforeUpdating(DataWrapperContract $item): DataWrapperContract
     {
         return $this->beforeCreating($item);
     }

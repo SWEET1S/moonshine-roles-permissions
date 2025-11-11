@@ -2,7 +2,7 @@
 
 namespace Sweet1s\MoonshineRBAC\Traits;
 
-use MoonShine\Laravel\Enums\Ability;
+use MoonShine\Support\Enums\Ability;
 use Spatie\Permission\Exceptions\PermissionDoesNotExist;
 
 trait HasMoonShineRolePermissions

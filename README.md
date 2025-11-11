@@ -23,7 +23,7 @@ permissions on a role-based level rather than individually assigning them to eac
 ---
 
 > ### Requirements
-> Moonshine: v3.0+
+> Moonshine: v4.0+
 >
 > Spatie Laravel Permissions: v6.0+
 
