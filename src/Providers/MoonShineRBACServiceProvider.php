@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\ServiceProvider;
 use MoonShine\Contracts\Core\DependencyInjection\ConfiguratorContract;
 use MoonShine\Contracts\Core\ResourceContract;
-use MoonShine\Laravel\Enums\Ability;
+use MoonShine\Support\Enums\Ability;
 use Sweet1s\MoonshineRBAC\Commands\MoonShineRBACAssignPermissionCommand;
 use Sweet1s\MoonshineRBAC\Commands\MoonShineRBACCreatePermissionsResourceCommand;
 use Sweet1s\MoonshineRBAC\Commands\MoonShineRBACInitPermissionsCommand;

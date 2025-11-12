@@ -4,10 +4,9 @@ namespace Sweet1s\MoonshineRBAC\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
-use MoonShine\Laravel\Contracts\Notifications\MoonShineNotificationContract;
+use MoonShine\Crud\Contracts\Notifications\MoonShineNotificationContract;
 use MoonShine\Laravel\Http\Controllers\MoonShineController;
 use MoonShine\Laravel\MoonShineAuth;
-use MoonShine\Laravel\MoonShineUI;
 use MoonShine\Support\Enums\ToastType;
 use Spatie\Permission\Models\Role;
 
@@ -31,7 +30,7 @@ class MoonShineRBACController extends MoonShineController
         if ($request->get('permissions') == null) {
             $role->syncPermissions([]);
 
-            MoonShineUI::toast(
+            toast(
                 trans('moonshine::ui.saved'),
                 ToastType::SUCCESS
             );
@@ -42,7 +41,7 @@ class MoonShineRBACController extends MoonShineController
 
         if ($authUserRoles->isEmpty()) {
 
-            MoonShineUI::toast(
+            toast(
                 trans('moonshine-rbac::ui.unauthorized'),
                 ToastType::ERROR
             );
@@ -53,7 +52,7 @@ class MoonShineRBACController extends MoonShineController
         }
 
         if (!(in_array($this->superAdminRoleId, $authUserRoles->pluck('id')->toArray()))) {
-            MoonShineUI::toast(
+            toast(
                 trans('moonshine-rbac::ui.unauthorized'),
                 ToastType::ERROR
             );
@@ -83,7 +82,7 @@ class MoonShineRBACController extends MoonShineController
                     continue;
                 }
 
-                MoonShineUI::toast(
+                toast(
                     trans('moonshine-rbac::ui.unauthorized'),
                     ToastType::ERROR
                 );
@@ -105,7 +104,7 @@ class MoonShineRBACController extends MoonShineController
             $role->save();
         }
 
-        MoonShineUI::toast(
+        toast(
             trans('moonshine::ui.saved'),
             ToastType::SUCCESS
         );
@@ -118,7 +117,7 @@ class MoonShineRBACController extends MoonShineController
         $user = config('moonshine.auth.model')::findOrFail($user);
 
         if (in_array($this->superAdminRoleId, $user?->roles->pluck('id')->toArray())) {
-            MoonShineUI::toast(
+            toast(
                 trans('moonshine-rbac::ui.unauthorized'),
                 ToastType::ERROR
             );
@@ -130,7 +129,7 @@ class MoonShineRBACController extends MoonShineController
 
         if (!$this->hasPermissionsToSyncRoles($authenticatedUser, $user, $request)) {
 
-            MoonShineUI::toast(
+            toast(
                 trans('moonshine-rbac::ui.unauthorized'),
                 ToastType::ERROR
             );
@@ -142,7 +141,7 @@ class MoonShineRBACController extends MoonShineController
 
         $user->syncRoles($roles);
 
-        MoonShineUI::toast(
+        toast(
             trans('moonshine::ui.saved'),
             ToastType::SUCCESS
         );
